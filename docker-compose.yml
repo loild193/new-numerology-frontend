@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  web:
+    container_name: web
+    image: web:latest
+    build:
+      context: .
+      target: runner
+      args:
+        APP_ENV: production
+        NEXT_PUBLIC_BASE_URL:
+        NEXT_PUBLIC_API_ENDPOINT:
+    environment:
+      TERM: linux
+      LANG: "C.UTF-8"
+      LOG_ROTATION_DAY: 7
+      NODE_ENV: production
+    env_file:
+      - .env.production.docker
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "2"
+    restart: "always"
+    ports:
+      - 6701:6701
