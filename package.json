@@ -1,8 +1,8 @@
 {
-  "name": "web",
-  "version": "1.0.5",
+  "name": "new-numerology",
+  "version": "0.0.1",
   "private": true,
-  "packageManager": "pnpm@7.14.0",
+  "packageManager": "pnpm@8.2.0",
   "scripts": {
     "prepare": "husky install",
     "preinstall": "npx only-allow pnpm",
