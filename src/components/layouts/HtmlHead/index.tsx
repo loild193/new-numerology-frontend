@@ -11,8 +11,8 @@ export interface Props {
 
 export const HtmlHead: React.FC<Props> = ({ title, description, url, ogImage, favicon }) => {
   const defaultDescription = 'virtuality, socializing, and reality.'
-  const defaultOGImage = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:6701'}/images/og-image.png`
-  const defaultFavicon = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:6701'}/favicon.ico`
+  const defaultOGImage = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:6709'}/images/og-image.png`
+  const defaultFavicon = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:6709'}/favicon.ico`
   const defaultTitle = 'App'
 
   return (

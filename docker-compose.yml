@@ -25,4 +25,4 @@ services:
         max-file: "2"
     restart: "always"
     ports:
-      - 6701:6701
+      - 6709:6709

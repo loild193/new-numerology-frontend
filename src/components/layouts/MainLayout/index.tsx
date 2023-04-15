@@ -2,8 +2,6 @@ import React, { HTMLAttributes, PropsWithChildren } from 'react'
 import dynamic from 'next/dynamic'
 import { HtmlHead, Props as HeadProps } from '@components/layouts/HtmlHead'
 import Header from '@components/layouts/Header'
-import { Sidebar } from '../Sidebar'
-// import { MobileLayout } from '../MobileLayout'
 
 const Footer = dynamic(() => import('../Footer/index').then((mod) => mod.Footer))
 
@@ -21,9 +19,7 @@ const MainLayout: React.FC<Props> = (props) => {
   return (
     <>
       <HtmlHead {...props} />
-      <main className="sm:flex h-screen max-h-screen min-h-screen overflow-hidden">
-        {/* <MobileLayout /> */}
-        <Sidebar />
+      <main className="sm:flex h-screen max-h-screen min-h-screen">
         <div className={`flex-auto container-w overflow-y-auto ${className || ''}`}>
           <Header />
           {children}

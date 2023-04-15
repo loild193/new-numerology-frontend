@@ -6,9 +6,9 @@
   "scripts": {
     "prepare": "husky install",
     "preinstall": "npx only-allow pnpm",
-    "dev": "next dev -p 6701",
+    "dev": "next dev -p 6709",
     "build": "next build",
-    "start": "next start -p 6701",
+    "start": "next start -p 6709",
     "ts-check": "tsc --noemit",
     "lint": "eslint -c .eslintrc.js --ext .ts,.tsx src pages --quiet",
     "lint-style": "stylelint '**/*.css'",

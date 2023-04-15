@@ -34,8 +34,8 @@
       "@redux/*": [
         "src/redux/*"
       ],
-      "@libs/*": [
-        "src/libs/*"
+      "@models/*": [
+        "src/models/*"
       ],
       "@utils/*": [
         "src/utils/*"
