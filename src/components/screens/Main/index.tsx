@@ -79,12 +79,12 @@ export function Main() {
   }
 
   return (
-    <div className="w-full text-white py-[200px] min-h-screen overflow-auto max-xs:pt-[100px]">
+    <div className="w-full py-[200px] min-h-screen overflow-auto max-xs:pt-[100px]">
       <div className="max-w-[600px] mx-auto max-xs:px-8">
         <h1 className="text-3xl max-md:text-2xl font-semibold text-center mb-2 uppercase">Nhân số học</h1>
         <p className="mb-3 text-center">Thấu hiểu bản thân - Làm chủ cuộc đời</p>
         <div className="mb-8 relative">
-          <label htmlFor="name" className="block mb-2 text-sm font-medium text-white">
+          <label htmlFor="name" className="block mb-2 text-sm font-medium">
             Họ và tên
           </label>
           <input
@@ -103,7 +103,7 @@ export function Main() {
 
         <div className="grid grid-cols-3 gap-x-6 max-xs:gap-x-4 relative pb-12">
           <div>
-            <label htmlFor="day" className="block mb-2 text-sm font-medium text-white">
+            <label htmlFor="day" className="block mb-2 text-sm font-medium">
               Ngày sinh
             </label>
             <select
@@ -125,7 +125,7 @@ export function Main() {
             {error.day ? <p className="absolute -bottom-[24px] left-0 text-red-500 text-sm">{error.day}</p> : null}
           </div>
           <div>
-            <label htmlFor="month" className="block mb-2 text-sm font-medium text-white">
+            <label htmlFor="month" className="block mb-2 text-sm font-medium">
               Tháng sinh
             </label>
             <select
@@ -147,7 +147,7 @@ export function Main() {
             {error.month ? <p className="absolute -bottom-[24px] left-0 text-red-500 text-sm">{error.month}</p> : null}
           </div>
           <div>
-            <label htmlFor="year" className="block mb-2 text-sm font-medium text-white">
+            <label htmlFor="year" className="block mb-2 text-sm font-medium">
               Năm sinh:
             </label>
             <input
