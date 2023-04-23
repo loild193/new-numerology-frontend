@@ -1,31 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { Result } from '../Result'
 import { DAY, IResult, MONTH } from '@models/interface'
-import {
-  balanceIndex,
-  firstChallengeIndex,
-  firstMilestoneIndex,
-  fourthChallengeIndex,
-  fourthMilestoneIndex,
-  lifePathIndex,
-  linkLifePathAndMissionIndex,
-  linkSoulAndPersonalityIndex,
-  matureIndex,
-  mindsetIndex,
-  missionIndex,
-  noOccurrenceNumbersIndex,
-  passionIndex,
-  personalDayIndex,
-  personalityIndex,
-  personalMonthIndex,
-  personalYearIndex,
-  secondChallengeIndex,
-  secondMilestoneIndex,
-  soulIndex,
-  subconsciousIndex,
-  thirdChallengeIndex,
-  thirdMilestoneIndex,
-} from '@utils/calculation'
+import { lifePathIndex, soulIndex, personalityIndex, talentIndex, passionIndex } from '@utils/calculation'
 import { isValidDate } from '@utils/helper'
 
 interface IInformation {
@@ -86,36 +62,17 @@ export function Main() {
   }
 
   const onCalculateResult = () => {
-    const lifePath = lifePathIndex(dateOfBirth) // [beforeLifePath, lifePath]
+    const lifePath = lifePathIndex(dateOfBirth)
     const finalName = name.toLowerCase().trim()
-    const mission = missionIndex(finalName)
     const soul = soulIndex(finalName)
     const personality = personalityIndex(finalName)
 
     const newResult: IResult = {
       lifePath,
-      mission,
-      linkLifePathAndMission: linkLifePathAndMissionIndex({ lifePath: lifePath[1], mission }),
-      mature: matureIndex({ lifePath: lifePath[1], mission }),
       soul,
       personality,
-      linkSoulAndPersonality: linkSoulAndPersonalityIndex({ soul, personality }),
-      balance: balanceIndex(finalName),
-      mindset: mindsetIndex(finalName, dateOfBirth),
-      subconscious: subconsciousIndex(finalName),
-      personalYear: personalYearIndex(dateOfBirth),
-      personalMonth: personalMonthIndex(dateOfBirth),
-      personalDay: personalDayIndex(dateOfBirth),
-      firstMilestone: firstMilestoneIndex(dateOfBirth),
-      secondMilestone: secondMilestoneIndex(dateOfBirth),
-      thirdMilestone: thirdMilestoneIndex(dateOfBirth),
-      fourthMilestone: fourthMilestoneIndex(dateOfBirth),
-      firstChallenge: firstChallengeIndex(dateOfBirth),
-      secondChallenge: secondChallengeIndex(dateOfBirth),
-      thirdChallenge: thirdChallengeIndex(dateOfBirth),
-      fourthChallenge: fourthChallengeIndex(dateOfBirth),
+      talent: talentIndex(dateOfBirth),
       passion: passionIndex(finalName),
-      noOccurrenceNumbers: noOccurrenceNumbersIndex(finalName),
     }
 
     setResult(newResult)
@@ -228,28 +185,10 @@ export function Main() {
         {result ? (
           <Result
             lifePath={result.lifePath}
-            mission={result.mission}
-            linkLifePathAndMission={result.linkLifePathAndMission}
-            mature={result.mature}
             soul={result.soul}
             personality={result.personality}
-            linkSoulAndPersonality={result.linkSoulAndPersonality}
-            balance={result.balance}
-            mindset={result.mindset}
-            subconscious={result.subconscious}
-            personalYear={result.personalYear}
-            personalMonth={result.personalMonth}
-            personalDay={result.personalDay}
-            firstMilestone={result.firstMilestone}
-            secondMilestone={result.secondMilestone}
-            thirdMilestone={result.thirdMilestone}
-            fourthMilestone={result.fourthMilestone}
-            firstChallenge={result.firstChallenge}
-            secondChallenge={result.secondChallenge}
-            thirdChallenge={result.thirdChallenge}
-            fourthChallenge={result.fourthChallenge}
+            talent={result.talent}
             passion={result.passion}
-            noOccurrenceNumbers={result.noOccurrenceNumbers}
           />
         ) : null}
       </div>

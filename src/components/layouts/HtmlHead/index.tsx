@@ -13,7 +13,7 @@ export const HtmlHead: React.FC<Props> = ({ title, description, url, ogImage, fa
   const defaultDescription = 'virtuality, socializing, and reality.'
   const defaultOGImage = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:6709'}/images/og-image.png`
   const defaultFavicon = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:6709'}/favicon.ico`
-  const defaultTitle = 'App'
+  const defaultTitle = 'Numerology Website'
 
   return (
     <NextHead>
@@ -23,12 +23,14 @@ export const HtmlHead: React.FC<Props> = ({ title, description, url, ogImage, fa
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <link rel="icon" href={favicon || defaultFavicon} />
       <link rel="shortcut icon" href={favicon || defaultFavicon} />
-      <meta property="og:url" content={url ?? 'https://facebook.com/'} />
+      <meta property="og:url" content={url ?? 'https://new-numerology.sr-itsmyfault.cf/'} />
       <meta property="og:title" content={title || defaultTitle} />
       <meta property="og:description" content={description || defaultDescription} />
-      <meta name="twitter:site" content={url ?? 'https://facebook.com/'} />
+      <meta name="twitter:site" content={url ?? 'https://new-numerology.sr-itsmyfault.cf/'} />
       <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={defaultTitle} />
       <meta name="twitter:image" content={ogImage || defaultOGImage} />
+      <meta name="twitter:description" content={defaultDescription} />
       <meta property="og:image" content={ogImage || defaultOGImage} />
     </NextHead>
   )
