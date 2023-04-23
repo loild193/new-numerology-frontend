@@ -9,8 +9,8 @@ services:
       target: runner
       args:
         APP_ENV: production
-        NEXT_PUBLIC_BASE_URL:
-        NEXT_PUBLIC_API_ENDPOINT:
+        NEXT_PUBLIC_BASE_URL: https://new-numerology.sr-itsmyfault.cf
+        NEXT_PUBLIC_API_ENDPOINT: https://new-backend.sr-itsmyfault.cf
     environment:
       TERM: linux
       LANG: "C.UTF-8"
