@@ -1,27 +1,9 @@
 export interface IResult {
-  lifePath: number[]
-  mission: number
-  linkLifePathAndMission: number
-  mature: number
+  lifePath: number
   soul: number
   personality: number
-  linkSoulAndPersonality: number
-  balance: number
-  mindset: number
-  subconscious: number
-  personalYear: number
-  personalMonth: number
-  personalDay: number
-  firstMilestone: number
-  secondMilestone: number
-  thirdMilestone: number
-  fourthMilestone: number
-  firstChallenge: number
-  secondChallenge: number
-  thirdChallenge: number
-  fourthChallenge: number
+  talent: number
   passion: number[]
-  noOccurrenceNumbers: number[]
 }
 
 interface Time {
