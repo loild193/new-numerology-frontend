@@ -18,13 +18,13 @@ export const SideBarAdmin = () => {
           <Sidebar.Items>
             <Sidebar.ItemGroup>
               <Sidebar.Item href="#" icon={ChartPieIcon}>
-                Dashboard
+                Trang chủ quản lý
               </Sidebar.Item>
               <Sidebar.Item href="#" icon={UsersIcon}>
-                Users
+                Quản lý người dùng
               </Sidebar.Item>
               <Sidebar.Item href="#" icon={ArrowSmallLeftIcon}>
-                Back Home
+                Trở về trang chủ
               </Sidebar.Item>
             </Sidebar.ItemGroup>
           </Sidebar.Items>

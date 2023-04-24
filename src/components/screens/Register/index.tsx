@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 export interface IRegisterInfo {
   fullname: string
@@ -24,7 +24,6 @@ export default function RegisterContainer() {
     email: '',
     numberphone: '',
   })
-  const router = useRouter()
 
   const handleChangeRegisterInfo = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setRegisterInfo((prev) => ({
@@ -38,10 +37,6 @@ export default function RegisterContainer() {
       return
     }
     console.log('register info: ', registerInfo)
-  }
-
-  const goToLoginPage = () => {
-    void router.push('/login')
   }
 
   const validateRegisterForm = () => {
@@ -166,9 +161,9 @@ export default function RegisterContainer() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Bạn đã có tài khoản?{' '}
-            <button onClick={goToLoginPage} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <Link href="/login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
               Đăng nhập
-            </button>
+            </Link>
           </p>
         </div>
       </div>

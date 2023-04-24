@@ -3,7 +3,7 @@ import AdminLayout from '@components/layouts/AdminLayout'
 const AdminPage = () => {
   return (
     <AdminLayout>
-      <div>Hello</div>
+      <div>Trang chủ admin</div>
     </AdminLayout>
   )
 }

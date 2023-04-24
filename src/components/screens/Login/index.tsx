@@ -1,5 +1,5 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { ChangeEvent, useState } from 'react'
+import Link from 'next/link'
 
 export interface ILoginInfo {
   loginId: string
@@ -20,7 +20,6 @@ export default function LoginContainer() {
     loginId: '',
     password: '',
   })
-  const router = useRouter()
 
   const handleChangeLoginInfo = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setLoginInfo((prev) => ({
@@ -34,10 +33,6 @@ export default function LoginContainer() {
       return
     }
     console.log('login info: ', loginInfo)
-  }
-
-  const goToRegister = () => {
-    void router.push('/register')
   }
 
   const validateLoginForm = () => {
@@ -122,11 +117,11 @@ export default function LoginContainer() {
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                   Mật khẩu
                 </label>
-                <div className="text-sm">
+                {/* <div className="text-sm">
                   <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Quên mật khẩu?
                   </a>
-                </div>
+                </div> */}
               </div>
               <div className="mt-2">
                 <input
@@ -156,9 +151,9 @@ export default function LoginContainer() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Bạn chưa có tài khoản?{' '}
-            <button onClick={goToRegister} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            <Link href="/register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
               Đăng ký tài khoản
-            </button>
+            </Link>
           </p>
         </div>
       </div>
