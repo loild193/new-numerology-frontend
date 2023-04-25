@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { Button } from 'flowbite-react'
 
 export interface IUsersProps {
@@ -10,7 +10,7 @@ export interface IUsersProps {
 
 export interface IUsersFilterProps {
   usersFilter: IUsersProps
-  handleChangeValue: (usersFilter: IUsersProps) => void
+  handleChangeValue: Dispatch<SetStateAction<IUsersProps>>
 }
 
 export default function UsersFilter({ usersFilter, handleChangeValue }: IUsersFilterProps) {

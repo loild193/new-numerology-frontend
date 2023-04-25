@@ -47,7 +47,7 @@ const defaultFilter: IUsersProps = {
 }
 
 const UsersPage = () => {
-  const [users, setUsers] = useState<Array<IUsers>>(mockUsers)
+  const [users] = useState<Array<IUsers>>(mockUsers)
   const [usersFilter, setUsersFilter] = useState<IUsersProps>(defaultFilter)
 
   const handleChangePage = () => {

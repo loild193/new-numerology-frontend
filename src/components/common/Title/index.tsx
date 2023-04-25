@@ -1,5 +1,3 @@
-import { ReactElement } from 'react'
-
 interface ITitleProps {
   title: string
 }
