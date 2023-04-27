@@ -1,24 +1,69 @@
 import { ChangeEvent, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useMutation } from '@tanstack/react-query'
+import { Input } from '@components/common/Authentication/Input'
+import { TopForm } from '@components/common/Authentication/TopForm'
+import { Button } from '@components/common/Button'
+import { DEFAULT_ERROR_MESSAGE, ERROR_MAPPING, ROLE } from '@models/api/authentication/login'
+import { useBoundStore } from '@src/zustand'
+import { login } from '@utils/api/authentication/login'
+import { NOTIFICATION_TYPE, notify } from '@utils/notify'
+import logger from '@utils/logger'
+import { AccountInfo } from '@src/zustand/accountInfo'
+import { setCookie } from 'cookies-next'
+import { COOKIES_KEY } from '@models/keys'
 
 export interface ILoginInfo {
-  loginId: string
+  userId: string
   password: string
 }
 
 export interface ILoginInfoError {
-  loginId: string
+  userId: string
   password: string
 }
 
 export default function LoginContainer() {
+  const router = useRouter()
+  const { saveAccountInfo } = useBoundStore((store) => ({ saveAccountInfo: store.saveAccountInfo }))
+
   const [loginInfo, setLoginInfo] = useState<ILoginInfo>({
-    loginId: '',
+    userId: '',
     password: '',
   })
   const [errors, setErrors] = useState<ILoginInfoError>({
-    loginId: '',
+    userId: '',
     password: '',
+  })
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: login,
+    onSuccess: (data) => {
+      if (data.success && data.response?.accessToken && data.response?.userId) {
+        const { userId, username, email, role, accessToken } = data.response
+
+        const accountInfo: AccountInfo = { userId, username, email, accessToken }
+        saveAccountInfo(accountInfo)
+        setCookie(COOKIES_KEY.ACCOUNT_INFO, accountInfo)
+
+        notify(NOTIFICATION_TYPE.SUCCESS, 'Đăng nhập thành công.')
+        setTimeout(() => {
+          if (role === ROLE.ADMIN) {
+            void router.push('/admin')
+          } else {
+            void router.push('/')
+          }
+        }, 2000)
+      } else {
+        logger.error('[login]', data.error)
+        notify(NOTIFICATION_TYPE.ERROR, ERROR_MAPPING.get(data.error?.message ?? '') ?? DEFAULT_ERROR_MESSAGE)
+      }
+    },
+    onError: (error: any) => {
+      logger.error('[login]', error)
+      notify(NOTIFICATION_TYPE.ERROR, ERROR_MAPPING.get((error?.message as string) ?? '') ?? DEFAULT_ERROR_MESSAGE)
+    },
   })
 
   const handleChangeLoginInfo = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -32,27 +77,30 @@ export default function LoginContainer() {
     if (!validateLoginForm()) {
       return
     }
-    console.log('login info: ', loginInfo)
+    mutate({ ...loginInfo })
   }
 
   const validateLoginForm = () => {
-    if (!loginInfo.loginId) {
+    if (!loginInfo.userId) {
       setErrors((prev) => ({
         ...prev,
-        loginId: 'Hãy nhập tên đăng nhập!',
+        userId: 'Hãy nhập tên đăng nhập!',
       }))
+
       return false
     } else {
       setErrors((prev) => ({
         ...prev,
-        loginId: '',
+        userId: '',
       }))
     }
+
     if (!loginInfo.password) {
       setErrors((prev) => ({
         ...prev,
         password: 'Hãy nhập mật khẩu!',
       }))
+
       return false
     } else {
       setErrors((prev) => ({
@@ -60,93 +108,43 @@ export default function LoginContainer() {
         password: '',
       }))
     }
+
     return true
   }
 
-  // useEffect(() => {
-  //   if (!errors.loginId) {
-  //     setErrors((prev) => ({
-  //       ...prev,
-  //       loginId: 'Hãy nhập tên đăng nhập!',
-  //     }))
-  //   } else if (!errors.password) {
-  //     setErrors((prev) => ({
-  //       ...prev,
-  //       password: 'Hãy nhập mật khẩu!',
-  //     }))
-  //   } else {
-  //     setErrors({ loginId: '', password: '' })
-  //   }
-  // }, [loginInfo])
+  const { userId, password } = loginInfo
+  const isButtonDisabled = isLoading || !!errors.userId || !!errors.password || !userId || !password
 
   return (
     <div className="flex justify-center w-[450px] md:border md:rounded-lg">
       <div className="flex min-h-full flex-1 flex-col justify-center px-12 py-16 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Đăng nhập vào hệ thống
-          </h2>
-        </div>
+        <TopForm label="Đăng nhập vào hệ thống" />
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <div className="space-y-6">
-            <div>
-              <label htmlFor="loginId" className="block text-sm font-medium leading-6 text-gray-900">
-                Tên đăng nhập
-              </label>
-              <div className="mt-2">
-                <input
-                  id="loginId"
-                  name="loginId"
-                  value={loginInfo.loginId}
-                  onChange={handleChangeLoginInfo}
-                  // eslint-disable-next-line max-len
-                  className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-                {errors.loginId && <p className="text-red-500">{errors.loginId}</p>}
-              </div>
-            </div>
+            <Input
+              label="Tên đăng nhập"
+              name="userId"
+              value={userId}
+              errorMessage={errors.userId}
+              onChange={handleChangeLoginInfo}
+            />
 
-            <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Mật khẩu
-                </label>
-                {/* <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    Quên mật khẩu?
-                  </a>
-                </div> */}
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={loginInfo.password}
-                  onChange={handleChangeLoginInfo}
-                  autoComplete="current-password"
-                  // eslint-disable-next-line max-len
-                  className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-                {errors.password && <p className="text-red-500">{errors.password}</p>}
-              </div>
-            </div>
+            <Input
+              label=" Mật khẩu"
+              name="password"
+              value={password}
+              errorMessage={errors.password}
+              onChange={handleChangeLoginInfo}
+            />
 
-            <div>
-              <button
-                onClick={handleLogin}
-                // eslint-disable-next-line max-len
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Đăng nhập
-              </button>
-            </div>
+            <Button
+              label="Đăng nhập"
+              loading={isLoading}
+              loadingLabel="Đang xử lý"
+              disabled={isButtonDisabled}
+              onClick={handleLogin}
+            />
           </div>
 
           <p className="mt-10 text-center text-sm text-gray-500">

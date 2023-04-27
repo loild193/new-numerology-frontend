@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.13",
+    "@tanstack/react-query": "^4.29.5",
     "cookies-next": "^2.1.1",
     "dayjs": "^1.11.6",
     "flowbite": "^1.6.5",
