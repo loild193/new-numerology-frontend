@@ -1,23 +1,30 @@
 import { useState } from 'react'
+import { GetServerSideProps } from 'next'
+import { getCookie } from 'cookies-next'
 import { Table, Pagination as Pagi } from 'flowbite-react'
 import AdminLayout from '@components/layouts/AdminLayout'
 import Title from '@components/common/Title'
 import { EditIcon } from '@components/common/Icon'
 import UsersFilter, { IUsersProps } from '@components/screens/Users/FilterUsers'
+import { ROLE } from '@models/api/authentication/login'
+import { COOKIES_KEY } from '@models/keys'
+import { AccountInfo } from '@src/zustand/accountInfo'
+import { safeParseJSON } from '@utils/json'
+import { STATUS_ACCESS_TOKEN, checkAccessToken } from '@utils/accessToken'
 
 export interface IUsers {
   id: number
-  fullname: string
+  fullName: string
   email: string
   numberPhone: string
   loginId: string
   numberOfSearch: number
 }
 
-const mockUsers: Array<IUsers> = [
+const MOCK_USERS: Array<IUsers> = [
   {
     id: 5,
-    fullname: 'Khánh Nguyễn',
+    fullName: 'Khánh Nguyễn',
     email: 'khanhnv1@kaido.vn',
     numberPhone: '099889900',
     loginId: '123456',
@@ -25,7 +32,7 @@ const mockUsers: Array<IUsers> = [
   },
   {
     id: 7,
-    fullname: 'Lợi Lê',
+    fullName: 'Lợi Lê',
     email: 'loild@kaido.vn',
     numberPhone: '099889901',
     loginId: '123123',
@@ -33,7 +40,7 @@ const mockUsers: Array<IUsers> = [
   },
   {
     id: 9,
-    fullname: 'Sushi Phấn Đào',
+    fullName: 'Sushi Phấn Đào',
     email: 'sushi@kaido.vn',
     numberPhone: '099889902',
     loginId: '123123',
@@ -41,18 +48,19 @@ const mockUsers: Array<IUsers> = [
   },
 ]
 
-const defaultFilter: IUsersProps = {
-  fullname: '',
+const DEFAULT_FILTER: IUsersProps = {
+  fullName: '',
   email: '',
 }
 
 const UsersPage = () => {
-  const [users] = useState<Array<IUsers>>(mockUsers)
-  const [usersFilter, setUsersFilter] = useState<IUsersProps>(defaultFilter)
+  const [users] = useState<Array<IUsers>>(MOCK_USERS)
+  const [usersFilter, setUsersFilter] = useState<IUsersProps>(DEFAULT_FILTER)
 
   const handleChangePage = () => {
     console.log('change page')
   }
+
   return (
     <AdminLayout>
       <Title title="Quản lý người dùng" />
@@ -76,7 +84,7 @@ const UsersPage = () => {
                 <Table.Cell>{index + 1}</Table.Cell>
                 <Table.Cell>{user.id}</Table.Cell>
                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {user.fullname}
+                  {user.fullName}
                 </Table.Cell>
                 <Table.Cell>{user.loginId}</Table.Cell>
                 <Table.Cell>{user.email}</Table.Cell>
@@ -103,6 +111,53 @@ const UsersPage = () => {
       </div>
     </AdminLayout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const accountInfoFromCookie = getCookie(COOKIES_KEY.ACCOUNT_INFO, {
+    req,
+    res,
+  }) as string
+
+  if (accountInfoFromCookie) {
+    let rawAccountInfo: AccountInfo | null = null
+    try {
+      rawAccountInfo = safeParseJSON<AccountInfo>(accountInfoFromCookie ?? '{}')
+    } catch (error) {
+      console.log('[parseAccountInfo]', error)
+    }
+    if (!rawAccountInfo) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/login',
+        },
+      }
+    }
+    const checkAccessTokenResult = checkAccessToken(rawAccountInfo.accessToken)
+    if (
+      checkAccessTokenResult.status === STATUS_ACCESS_TOKEN.UNEXPIRED &&
+      checkAccessTokenResult.data?.role === ROLE.ADMIN
+    ) {
+      return {
+        props: {},
+      }
+    }
+
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/login',
+      },
+    }
+  }
+
+  return {
+    redirect: {
+      permanent: false,
+      destination: '/login',
+    },
+  }
 }
 
 export default UsersPage
