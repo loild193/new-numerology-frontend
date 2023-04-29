@@ -27,3 +27,10 @@ export type Response<TData> = {
   error?: Error
   message?: string
 }
+
+export type Pagination = {
+  startPage: number
+  limit: number
+  totalPages: number
+  totalRecords: number
+}

@@ -1,11 +1,12 @@
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { Button } from 'flowbite-react'
+import { Input } from '@components/common/Authentication/Input'
+import { LIST_USER_FILTER } from '@models/api/admin/getUsers'
+import useChangeRoute from '@hooks/useChangeRoute'
 
 export interface IUsersProps {
-  loginId?: string
-  fullName?: string
-  email?: string
-  status?: number | string
+  keyword: string
+  filter: LIST_USER_FILTER
 }
 
 export interface IUsersFilterProps {
@@ -14,103 +15,64 @@ export interface IUsersFilterProps {
 }
 
 export default function UsersFilter({ usersFilter, handleChangeValue }: IUsersFilterProps) {
+  const { changeRoute, removeQueryParams } = useChangeRoute()
+
   const onHandleResetFilter = () => {
-    handleChangeValue({
-      loginId: '',
-      fullName: '',
-      email: '',
-      status: '',
-    })
+    const value = {
+      keyword: '',
+      filter: LIST_USER_FILTER.ALL,
+    }
+    handleChangeValue(value)
+    removeQueryParams()
   }
 
   const handleChangeFilter = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const value = { [e.target.name]: e.target.value }
     handleChangeValue((prev) => ({
       ...prev,
-      [e.target.name]: [e.target.value],
+      ...value,
     }))
+
+    changeRoute(value)
   }
+
   return (
     <div className="mb-8 bg-slate-100 rounded-lg px-4 py-4">
       <div>Tìm kiếm</div>
       <div className="grid grid-cols-2 gap-4 my-4">
+        <Input
+          label="Nhập họ và tên/email/số điện thoại"
+          name="keyword"
+          placeholder="Nhập họ và tên, email, số điện thoại"
+          value={usersFilter.keyword}
+          onChange={handleChangeFilter}
+        />
         <div>
-          <label htmlFor="loginId" className="block text-sm font-medium leading-6 text-gray-900">
-            Tên đăng nhập
-          </label>
-          <div className="mt-2">
-            <input
-              id="loginId"
-              name="loginId"
-              value={usersFilter.loginId}
-              onChange={handleChangeFilter}
-              // eslint-disable-next-line max-len
-              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="fullname" className="block text-sm font-medium leading-6 text-gray-900">
-            Họ và tên
-          </label>
-          <div className="mt-2">
-            <input
-              id="fullname"
-              name="fullname"
-              value={usersFilter.fullName}
-              onChange={handleChangeFilter}
-              // eslint-disable-next-line max-len
-              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-            Email
-          </label>
-          <div className="mt-2">
-            <input
-              id="email"
-              name="email"
-              value={usersFilter.email}
-              onChange={handleChangeFilter}
-              // eslint-disable-next-line max-len
-              className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
-          </div>
-        </div>
-        <div>
-          <label htmlFor="status" className="block text-sm font-medium leading-6 text-gray-900">
+          <label htmlFor="filter" className="block text-sm font-medium leading-6 text-gray-900">
             Trạng thái
           </label>
           <div className="mt-2">
             <select
-              id="status"
-              name="status"
-              value={usersFilter.status}
-              onChange={handleChangeFilter}
-              placeholder="Chọn trạng thái"
+              id="filter"
+              name="filter"
               // eslint-disable-next-line max-len
               className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              placeholder="Chọn trạng thái"
+              value={usersFilter.filter}
+              onChange={handleChangeFilter}
             >
-              <option disabled selected value="">
-                Chọn trạng thái
-              </option>
-              <option value="1">Hoạt động</option>
-              <option value="2">Đang chờ duyệt</option>
+              <option value={LIST_USER_FILTER.ALL}>Tất cả</option>
+              <option value={LIST_USER_FILTER.HAS_ACCOUNT}>Đã có tài khoản</option>
+              <option value={LIST_USER_FILTER.NOT_HAVE_ACCOUNT}>Chưa có tài khoản</option>
             </select>
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap  justify-end gap-2">
-        <div>
-          <Button color="gray" onClick={onHandleResetFilter}>
-            Đặt lại
-          </Button>
-        </div>
-        <div>
-          <Button>Tìm kiếm</Button>
-        </div>
+      <div className="flex flex-wrap justify-end gap-2">
+        <Button color="gray" onClick={onHandleResetFilter}>
+          Đặt lại
+        </Button>
+        <Button>Tìm kiếm</Button>
       </div>
     </div>
   )
