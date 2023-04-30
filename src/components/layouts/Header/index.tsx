@@ -1,7 +1,20 @@
 import React from 'react'
-import { Navbar, Dropdown, Avatar } from 'flowbite-react'
+import Link from 'next/link'
+import Avvvatars from 'avvvatars-react'
+import { Navbar, Dropdown } from 'flowbite-react'
+import { useLogOut } from '@hooks/useLogOut'
+import { useBoundStore } from '@src/zustand'
+import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 
 export const Header = () => {
+  const { accountInfo } = useBoundStore((store) => ({ accountInfo: store.accountInfo }))
+  const { logOut } = useLogOut()
+
+  const onLogOut = () => {
+    logOut()
+    notify(NOTIFICATION_TYPE.SUCCESS, 'Đăng xuất thành công')
+  }
+
   return (
     <Navbar fluid={true} rounded={true} className="border-b">
       <Navbar.Brand href="/">
@@ -12,29 +25,26 @@ export const Header = () => {
         />
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Kaido</span>
       </Navbar.Brand>
-      <div className="flex md:order-2">
-        <Dropdown
-          arrowIcon={false}
-          inline={true}
-          label={
-            <Avatar
-              alt="User settings"
-              img="https://bumcheo.com/wp-content/uploads/2022/09/doi-thu-doflamingo.jpg"
-              rounded={true}
-            />
-          }
-        >
-          <Dropdown.Header>
-            <span className="block text-sm">Khánh Nguyễn</span>
-            <span className="block truncate text-sm font-medium">khanh@kaido.vn</span>
-          </Dropdown.Header>
-          <Dropdown.Item>Trang chủ</Dropdown.Item>
-          <Dropdown.Item>Trang cá nhân</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item>Đăng xuất</Dropdown.Item>
-        </Dropdown>
-        <Navbar.Toggle />
-      </div>
+      {accountInfo.accessToken ? (
+        <div className="flex md:order-2">
+          <Dropdown
+            arrowIcon={false}
+            inline={true}
+            label={<Avvvatars value={accountInfo.username} style="character" size={48} />}
+          >
+            <Dropdown.Header>
+              <span className="block text-sm">{accountInfo.username}</span>
+              <span className="block truncate text-sm font-medium">{accountInfo.email}</span>
+            </Dropdown.Header>
+            <Dropdown.Item>
+              <Link href="/change-password">Đổi mật khẩu</Link>
+            </Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={onLogOut}>Đăng xuất</Dropdown.Item>
+          </Dropdown>
+          <Navbar.Toggle />
+        </div>
+      ) : null}
       <Navbar.Collapse>
         <Navbar.Link href="/" active={true}>
           Trang chủ

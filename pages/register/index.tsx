@@ -3,7 +3,7 @@ import RegisterContainer from '@components/screens/Register'
 
 const RegisterPage = () => {
   return (
-    <MainLayout title="Register new account">
+    <MainLayout title="Đăng ký tài khoản mới">
       <div className="flex justify-center mt-16 mb-12">
         <RegisterContainer />
       </div>

@@ -121,7 +121,7 @@ export default function RegisterContainer() {
 
   return (
     <div className="flex justify-center w-[450px] md:border md:rounded-lg">
-      <div className="flex min-h-full flex-1 flex-col justify-center px-12 py-16 lg:px-8">
+      <div className="flex min-h-full flex-1 flex-col justify-center px-12 py-16 lg:px-8 shadow-lg">
         <TopForm label="Đăng ký thông tin" />
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

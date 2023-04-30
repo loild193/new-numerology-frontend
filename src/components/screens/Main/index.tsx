@@ -3,6 +3,9 @@ import { Result } from '../Result'
 import { DAY, IResult, MONTH } from '@models/interface'
 import { lifePathIndex, soulIndex, personalityIndex, talentIndex, passionIndex } from '@utils/calculation'
 import { isValidDate } from '@utils/helper'
+import { Select } from './Select'
+import { Input } from '@components/common/Authentication/Input'
+import { Button } from '@components/common/Button'
 
 interface IInformation {
   name: string
@@ -79,73 +82,37 @@ export function Main() {
   }
 
   return (
-    <div className="w-full py-[200px] min-h-screen overflow-auto max-xs:pt-[100px]">
-      <div className="max-w-[600px] mx-auto max-xs:px-8">
+    <div className="w-full py-[120px] min-h-screen overflow-auto max-xs:pt-[100px]">
+      <div className="max-w-[800px] mx-auto max-xs:px-8">
         <h1 className="text-3xl max-md:text-2xl font-semibold text-center mb-2 uppercase">META SALE SYSTEM </h1>
         <p className="mb-3 text-center">Hệ thống bán hàng từ tâm</p>
-        <div className="mb-8 relative">
-          <label htmlFor="name" className="block mb-2 text-sm font-medium">
-            Họ và tên
-          </label>
-          <input
-            type="text"
-            name="name"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-            focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
-            dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-            dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            required
-            value={name === '-1' ? '' : name}
+        <Input
+          label="Họ và tên"
+          name="name"
+          value={name === '-1' ? '' : name}
+          errorMessage={error.name}
+          onChange={onUpdateInformation}
+        />
+
+        <div className="grid grid-cols-3 gap-x-6 max-xs:gap-x-4 relative mt-4 pb-12">
+          <Select
+            label="Ngày sinh"
+            name="day"
+            value={day}
+            options={DAY}
+            errorMessage={error.day}
             onChange={onUpdateInformation}
           />
-          {error.name ? <p className="absolute -bottom-[24px] left-0 text-red-500 text-sm">{error.name}</p> : null}
-        </div>
 
-        <div className="grid grid-cols-3 gap-x-6 max-xs:gap-x-4 relative pb-12">
-          <div>
-            <label htmlFor="day" className="block mb-2 text-sm font-medium">
-              Ngày sinh
-            </label>
-            <select
-              name="day"
-              className="appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-               focus:ring-blue-500 focus:border-blue-500 block w-full p-3
-              dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-               dark:focus:border-blue-500
-              max-xs:text-xs max-xs:px-[6px]"
-              value={day}
-              onChange={onUpdateInformation}
-            >
-              {DAY.map((time) => (
-                <option key={time.label} value={time.value}>
-                  {time.label}
-                </option>
-              ))}
-            </select>
-            {error.day ? <p className="absolute -bottom-[24px] left-0 text-red-500 text-sm">{error.day}</p> : null}
-          </div>
-          <div>
-            <label htmlFor="month" className="block mb-2 text-sm font-medium">
-              Tháng sinh
-            </label>
-            <select
-              name="month"
-              className="appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-               focus:ring-blue-500 focus:border-blue-500 block w-full p-3
-              dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-               dark:focus:ring-blue-500 dark:focus:border-blue-500
-              max-xs:text-xs max-xs:px-[6px]"
-              value={month}
-              onChange={onUpdateInformation}
-            >
-              {MONTH.map((time) => (
-                <option key={time.label} value={time.value}>
-                  {time.label}
-                </option>
-              ))}
-            </select>
-            {error.month ? <p className="absolute -bottom-[24px] left-0 text-red-500 text-sm">{error.month}</p> : null}
-          </div>
+          <Select
+            label="Tháng sinh"
+            name="month"
+            value={month}
+            options={MONTH}
+            errorMessage={error.month}
+            onChange={onUpdateInformation}
+          />
+
           <div>
             <label htmlFor="year" className="block mb-2 text-sm font-medium">
               Năm sinh:
@@ -170,17 +137,17 @@ export function Main() {
           ) : null}
         </div>
 
-        <button
-          type="button"
-          className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800
-          focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-8
-          dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900
-          disabled:opacity-60 disabled:cursor-not-allowed disabled:select-none"
-          disabled={!!error.name || !!error.day || !!error.month || !!error.year || !!error.dateOfBirth}
-          onClick={onCalculateResult}
-        >
-          Xem kết quả
-        </button>
+        <div className="flex justify-center">
+          <div className="max-w-[160px]">
+            <Button
+              label="Xem kết quả"
+              disabled={!!error.name || !!error.day || !!error.month || !!error.year || !!error.dateOfBirth}
+              loading={false}
+              loadingLabel=""
+              onClick={onCalculateResult}
+            />
+          </div>
+        </div>
 
         {result ? (
           <Result
