@@ -4,18 +4,29 @@ export default function useChangeRoute() {
   const router = useRouter()
   const { pathname } = router
 
-  const handleChangeRoute = async (routeQuery: Record<any, any>) => {
-    await router.replace(
+  const changeRoute = (routeQuery: Record<any, any>) => {
+    void router.replace(
       {
         pathname,
         query: {
+          ...router.query,
           ...routeQuery,
         },
       },
       undefined,
-      { scroll: false },
+      { scroll: false, shallow: true },
     )
   }
 
-  return { handleChangeRoute }
+  const removeQueryParams = () => {
+    void router.replace(
+      {
+        pathname,
+      },
+      undefined,
+      { scroll: false, shallow: true },
+    )
+  }
+
+  return { changeRoute, removeQueryParams }
 }

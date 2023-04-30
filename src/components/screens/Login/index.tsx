@@ -2,17 +2,18 @@ import { ChangeEvent, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMutation } from '@tanstack/react-query'
+import { setCookie } from 'cookies-next'
 import { Input } from '@components/common/Authentication/Input'
+import { PasswordInput } from '@components/common/Authentication/PasswordInput'
 import { TopForm } from '@components/common/Authentication/TopForm'
 import { Button } from '@components/common/Button'
 import { DEFAULT_ERROR_MESSAGE, ERROR_MAPPING, ROLE } from '@models/api/authentication/login'
+import { COOKIES_KEY } from '@models/keys'
 import { useBoundStore } from '@src/zustand'
+import { AccountInfo } from '@src/zustand/accountInfo'
 import { login } from '@utils/api/authentication/login'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 import logger from '@utils/logger'
-import { AccountInfo } from '@src/zustand/accountInfo'
-import { setCookie } from 'cookies-next'
-import { COOKIES_KEY } from '@models/keys'
 
 export interface ILoginInfo {
   userId: string
@@ -50,7 +51,7 @@ export default function LoginContainer() {
         notify(NOTIFICATION_TYPE.SUCCESS, 'Đăng nhập thành công.')
         setTimeout(() => {
           if (role === ROLE.ADMIN) {
-            void router.push('/admin')
+            void router.push('/admin/users')
           } else {
             void router.push('/')
           }
@@ -130,8 +131,8 @@ export default function LoginContainer() {
               onChange={handleChangeLoginInfo}
             />
 
-            <Input
-              label=" Mật khẩu"
+            <PasswordInput
+              label="Mật khẩu"
               name="password"
               value={password}
               errorMessage={errors.password}
