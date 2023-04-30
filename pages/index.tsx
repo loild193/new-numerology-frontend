@@ -10,7 +10,7 @@ import { safeParseJSON } from '@utils/json'
 
 const HomePage = () => {
   return (
-    <MainLayout>
+    <MainLayout title="Tra cứu thần số học">
       <Main />
     </MainLayout>
   )

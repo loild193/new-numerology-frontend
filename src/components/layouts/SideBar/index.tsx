@@ -1,27 +1,20 @@
 import Avvvatars from 'avvvatars-react'
 import { Sidebar } from 'flowbite-react'
 import { ChartPieIcon, UsersIcon, ArrowSmallLeftIcon } from '@components/common/Icon'
+import { useLogOut } from '@hooks/useLogOut'
 import { useBoundStore } from '@src/zustand'
-import { useRouter } from 'next/router'
-import { deleteCookie } from 'cookies-next'
-import { COOKIES_KEY } from '@models/keys'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 
 export const SideBarAdmin = () => {
-  const router = useRouter()
-  const { accountInfo, removeAccountInfo } = useBoundStore((store) => ({
+  const { accountInfo } = useBoundStore((store) => ({
     accountInfo: store.accountInfo,
     removeAccountInfo: store.removeAccountInfo,
   }))
+  const { logOut } = useLogOut()
 
   const onLogOut = () => {
-    removeAccountInfo()
-    deleteCookie(COOKIES_KEY.ACCOUNT_INFO)
-
+    logOut()
     notify(NOTIFICATION_TYPE.SUCCESS, 'Đăng xuất thành công')
-    setTimeout(() => {
-      void router.push('/login')
-    }, 1000)
   }
 
   return (
