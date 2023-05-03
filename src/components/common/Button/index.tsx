@@ -28,7 +28,7 @@ export const Button = ({ label, disabled = false, variant = 'background', loadin
   }
 
   return (
-    <button className={baseButtonClassName} onClick={onClick}>
+    <button className={baseButtonClassName} disabled={disabled} onClick={onClick}>
       {loading ? (
         <>
           <Spinner className={spinnerClassName} />
