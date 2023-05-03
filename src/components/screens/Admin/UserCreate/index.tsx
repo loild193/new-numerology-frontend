@@ -22,7 +22,14 @@ type UserForm = {
   searchAmountLeft: number
 }
 
-const createUser = async (input: { userId: string; password: string; searchAmountLeft?: number }) => {
+const createUser = async (input: {
+  userId: string
+  username: string
+  password: string
+  phone: string
+  email: string
+  searchAmountLeft?: number
+}) => {
   try {
     const response = await fetch('/api/admin/create-user', {
       method: 'POST',
@@ -82,7 +89,7 @@ export const UserCreate = () => {
   }
 
   const onCreateUser = () => {
-    mutate({ userId: userId ?? '', password, searchAmountLeft })
+    mutate({ userId: userId ?? '', username, password, phone, email, searchAmountLeft })
   }
 
   const { username, email, phone, userId, password, searchAmountLeft } = userForm

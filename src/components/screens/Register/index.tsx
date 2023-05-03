@@ -13,25 +13,25 @@ import logger from '@utils/logger'
 export interface IRegisterInfo {
   username: string
   email: string
-  phoneNumber: string
+  phone: string
 }
 
 export interface ILoginInfoError {
   username: string
   email: string
-  phoneNumber: string
+  phone: string
 }
 
 export default function RegisterContainer() {
   const [registerInfo, setRegisterInfo] = useState<IRegisterInfo>({
     username: '',
     email: '',
-    phoneNumber: '',
+    phone: '',
   })
   const [errors, setErrors] = useState<IRegisterInfo>({
     username: '',
     email: '',
-    phoneNumber: '',
+    phone: '',
   })
 
   const { mutate, isLoading } = useMutation({
@@ -65,7 +65,7 @@ export default function RegisterContainer() {
   }
 
   const validateRegisterForm = () => {
-    const { username, email, phoneNumber } = registerInfo
+    const { username, email, phone } = registerInfo
 
     if (!username) {
       setErrors((prev) => ({
@@ -99,25 +99,25 @@ export default function RegisterContainer() {
       }))
     }
 
-    if (!phoneNumber) {
+    if (!phone) {
       setErrors((prev) => ({
         ...prev,
-        phoneNumber: 'Hãy nhập số điện thoại!',
+        phone: 'Hãy nhập số điện thoại!',
       }))
       return false
     } else {
       setErrors((prev) => ({
         ...prev,
-        phoneNumber: '',
+        phone: '',
       }))
     }
 
     return true
   }
 
-  const { email, phoneNumber, username } = registerInfo
+  const { email, phone, username } = registerInfo
   const isButtonDisabled =
-    isLoading || !!errors.email || !!errors.phoneNumber || !!errors.username || !email || !phoneNumber || !username
+    isLoading || !!errors.email || !!errors.phone || !!errors.username || !email || !phone || !username
 
   return (
     <div className="flex justify-center w-[450px] md:border md:rounded-lg">
@@ -141,10 +141,10 @@ export default function RegisterContainer() {
               onChange={handleChangeRegisterInfo}
             />
             <Input
-              name="phoneNumber"
+              name="phone"
               label="Số điện thoại"
-              value={phoneNumber}
-              errorMessage={errors.phoneNumber}
+              value={phone}
+              errorMessage={errors.phone}
               onChange={handleChangeRegisterInfo}
             />
 

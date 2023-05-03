@@ -1,7 +1,7 @@
 export type Input = {
   username: string
   email: string
-  phoneNumber: string
+  phone: string
 }
 
 export type ServerResponse = {

@@ -3,6 +3,9 @@ import { User } from './getUsers'
 export type Input = {
   id: string
   userId: string
+  username: string
+  phone: string
+  email: string
   password: string
   searchAmountLeft?: number
   accessToken: string

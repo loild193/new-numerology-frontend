@@ -5,7 +5,7 @@ export const register = async (
   input: Input,
   additionalHeaders: Record<string, string> = {},
 ): Promise<Response<ServerResponse>> => {
-  const { username, email, phoneNumber } = input || {}
+  const { username, email, phone } = input || {}
 
   if (!username) {
     return { success: false, response: null, message: 'Missing username' }
@@ -13,8 +13,8 @@ export const register = async (
   if (!email) {
     return { success: false, response: null, message: 'Missing email' }
   }
-  if (!phoneNumber) {
-    return { success: false, response: null, message: 'Missing phoneNumber' }
+  if (!phone) {
+    return { success: false, response: null, message: 'Missing phone' }
   }
 
   try {
@@ -24,7 +24,7 @@ export const register = async (
         ...DEFAULT_HEADERS,
         ...additionalHeaders,
       },
-      body: JSON.stringify({ username, email, phoneNumber }),
+      body: JSON.stringify({ username, email, phone }),
     })
 
     if (registerResponse.ok) {

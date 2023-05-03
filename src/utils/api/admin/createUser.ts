@@ -5,7 +5,7 @@ export const createUser = async (
   input: Input,
   additionalHeaders: Record<string, string> = {},
 ): Promise<Response<ServerResponse>> => {
-  const { userId, password, searchAmountLeft, accessToken } = input ?? {}
+  const { userId, username, password, phone, email, searchAmountLeft, accessToken } = input ?? {}
 
   if (!userId) {
     return { success: false, response: null, message: 'Missing userId' }
@@ -13,9 +13,18 @@ export const createUser = async (
   if (!password) {
     return { success: false, response: null, message: 'Missing password' }
   }
+  if (!phone) {
+    return { success: false, response: null, message: 'Missing phone' }
+  }
+  if (!username) {
+    return { success: false, response: null, message: 'Missing username' }
+  }
+  if (!email) {
+    return { success: false, response: null, message: 'Missing email' }
+  }
 
   try {
-    const createBody: Record<string, string | number> = { userId, password }
+    const createBody: Record<string, string | number> = { userId, username, password, phone, email }
     if (searchAmountLeft) {
       createBody.searchAmountLeft = searchAmountLeft
     }
