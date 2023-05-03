@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
 import { Result } from '../Result'
 import { DAY, IResult, MONTH } from '@models/interface'
 import { lifePathIndex, soulIndex, personalityIndex, talentIndex, passionIndex } from '@utils/calculation'
@@ -6,6 +7,9 @@ import { isValidDate } from '@utils/helper'
 import { Select } from './Select'
 import { Input } from '@components/common/Authentication/Input'
 import { Button } from '@components/common/Button'
+import { ServerResponse } from '@models/api/user/search-numerology'
+import logger from '@utils/logger'
+import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 
 interface IInformation {
   name: string
@@ -40,6 +44,41 @@ export function Main() {
 
   const { name, day, month, year } = information
   const dateOfBirth = `${day}/${month}/${year}`
+
+  const searchNumerology = async (input: { name: string; birthday: string; phone: string; company: string }) => {
+    try {
+      const response = await fetch('/api/user/search-numerology', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...input }),
+        credentials: 'same-origin',
+      })
+      const rawResponse = (await response.json()) as ServerResponse
+
+      console.log('raw Response: ', rawResponse)
+
+      return rawResponse
+    } catch (error) {
+      logger.error('[searchNumerology]', error)
+    }
+  }
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: searchNumerology,
+    onSuccess: (data) => {
+      if (data?.success && data?.response?.userId) {
+        notify(NOTIFICATION_TYPE.SUCCESS, 'Kiểm tra thành công ')
+      }
+
+      onCalculateResult()
+    },
+    onError: (error: any) => {
+      logger.error('[searchNumerology]', error)
+      notify(NOTIFICATION_TYPE.ERROR, 'Có lỗi xảy ra!')
+    },
+  })
 
   useEffect(() => {
     if (!name) {
@@ -79,6 +118,32 @@ export function Main() {
     }
 
     setResult(newResult)
+  }
+
+  const onSearchNumerology = () => {
+    if (!name || name === '-1') {
+      notify(NOTIFICATION_TYPE.ERROR, 'Nhập thiếu tên!')
+      return
+    } else if (!day) {
+      notify(NOTIFICATION_TYPE.ERROR, 'Nhập thiếu ngày sinh!')
+      return
+    } else if (!month) {
+      notify(NOTIFICATION_TYPE.ERROR, 'Nhập thiếu tháng sinh!')
+      return
+    } else if (!year || year === -1) {
+      notify(NOTIFICATION_TYPE.ERROR, 'Nhập thiếu năm sinh!')
+      return
+    } else if (year > 0 && !isValidDate(dateOfBirth)) {
+      notify(NOTIFICATION_TYPE.ERROR, 'Ngày tháng năm sinh không hợp lệ')
+      return
+    }
+
+    mutate({
+      name: name.toLowerCase().trim(),
+      birthday: dateOfBirth,
+      phone: '0123456789',
+      company: 'HBLAB',
+    })
   }
 
   return (
@@ -144,10 +209,12 @@ export function Main() {
               disabled={!!error.name || !!error.day || !!error.month || !!error.year || !!error.dateOfBirth}
               loading={false}
               loadingLabel=""
-              onClick={onCalculateResult}
+              onClick={onSearchNumerology}
             />
           </div>
         </div>
+
+        {isLoading ? <div>Loading...</div> : null}
 
         {result ? (
           <Result

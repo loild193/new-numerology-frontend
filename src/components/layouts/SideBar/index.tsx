@@ -1,6 +1,6 @@
 import Avvvatars from 'avvvatars-react'
 import { Sidebar } from 'flowbite-react'
-import { ChartPieIcon, UsersIcon, ArrowSmallLeftIcon } from '@components/common/Icon'
+import { ChartPieIcon, UsersIcon, ArrowSmallLeftIcon, SearchIcon } from '@components/common/Icon'
 import { useLogOut } from '@hooks/useLogOut'
 import { useBoundStore } from '@src/zustand'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
@@ -18,7 +18,7 @@ export const SideBarAdmin = () => {
   }
 
   return (
-    <div className="w-fit">
+    <div className="w-44 fixed top-0 h-screen">
       <Sidebar aria-label="Admin sidebar">
         <div className="h-full border-r px-2">
           <div className="flex flex-col items-center py-10">
@@ -28,10 +28,13 @@ export const SideBarAdmin = () => {
           </div>
           <Sidebar.Items>
             <Sidebar.ItemGroup>
-              <Sidebar.Item href="#" icon={ChartPieIcon}>
+              <Sidebar.Item href="/admin" icon={ChartPieIcon}>
                 Trang chủ quản lý
               </Sidebar.Item>
-              <Sidebar.Item href="#" icon={UsersIcon}>
+              <Sidebar.Item href="/" icon={SearchIcon}>
+                Trang tra cứu chỉ số
+              </Sidebar.Item>
+              <Sidebar.Item href="/admin/users" icon={UsersIcon}>
                 Quản lý người dùng
               </Sidebar.Item>
               <Sidebar.Item icon={ArrowSmallLeftIcon}>

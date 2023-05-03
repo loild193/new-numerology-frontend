@@ -39,8 +39,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
     }
     const checkAccessTokenResult = checkAccessToken(rawAccountInfo.accessToken)
     if (
-      checkAccessTokenResult.status === STATUS_ACCESS_TOKEN.UNEXPIRED &&
-      checkAccessTokenResult.data?.role === ROLE.USER
+      (checkAccessTokenResult.status === STATUS_ACCESS_TOKEN.UNEXPIRED &&
+        checkAccessTokenResult.data?.role === ROLE.USER) ||
+      checkAccessTokenResult.data?.role === ROLE.ADMIN
     ) {
       return {
         props: {},

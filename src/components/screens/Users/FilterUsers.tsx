@@ -3,6 +3,7 @@ import { Button } from 'flowbite-react'
 import { Input } from '@components/common/Authentication/Input'
 import { LIST_USER_FILTER } from '@models/api/admin/getUsers'
 import useChangeRoute from '@hooks/useChangeRoute'
+import Link from 'next/link'
 
 export interface IUsersProps {
   keyword: string
@@ -72,7 +73,9 @@ export default function UsersFilter({ usersFilter, handleChangeValue }: IUsersFi
         <Button color="gray" onClick={onHandleResetFilter}>
           Đặt lại
         </Button>
-        <Button>Tìm kiếm</Button>
+        <Button color="success">
+          <Link href={'/admin/users/create'}>Thêm mới</Link>
+        </Button>
       </div>
     </div>
   )

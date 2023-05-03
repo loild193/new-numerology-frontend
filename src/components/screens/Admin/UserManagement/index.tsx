@@ -119,7 +119,7 @@ export const UserManagement: React.FC<Props> = ({ page, keyword, filter, startPa
           <Table.HeadCell>Tên đăng nhập</Table.HeadCell>
           <Table.HeadCell>Email</Table.HeadCell>
           <Table.HeadCell>Số điện thoại</Table.HeadCell>
-          <Table.HeadCell>Số lần tra cứu còn lại</Table.HeadCell>
+          <Table.HeadCell>Số lần tra cứu</Table.HeadCell>
           <Table.HeadCell>
             <span className="sr-only">Chỉnh sửa</span>
           </Table.HeadCell>
@@ -161,13 +161,19 @@ export const UserManagement: React.FC<Props> = ({ page, keyword, filter, startPa
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={index}>
                 <Table.Cell>{index + 1}</Table.Cell>
                 <Table.Cell>{user.id}</Table.Cell>
-                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                  {user.username}
-                </Table.Cell>
-                <Table.Cell>{user.userId ?? 'Chưa có'}</Table.Cell>
+                <Table.Cell className="whitespace-nowrap dark:text-white">{user.username}</Table.Cell>
+                <Table.Cell className="font-medium text-gray-900">{user.userId ?? 'Chưa có'}</Table.Cell>
                 <Table.Cell>{user.email}</Table.Cell>
                 <Table.Cell>{user.phone ?? 'Chưa có'}</Table.Cell>
-                <Table.Cell>{user.searchAmountLeft ?? 'Chưa có'}</Table.Cell>
+                <Table.Cell>
+                  <Link
+                    href={`/admin/users/${user.id}/update-search-amount`}
+                    className="text-blue-600"
+                    title="Chỉnh sửa số lần tra cứu"
+                  >
+                    {user.searchAmountLeft ?? 'Chưa có'}{' '}
+                  </Link>
+                </Table.Cell>
                 <Table.Cell>
                   <Link
                     href={`/admin/users/${user.id}`}
