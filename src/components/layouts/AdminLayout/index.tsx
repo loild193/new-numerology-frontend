@@ -19,7 +19,7 @@ const AdminLayout: React.FC<Props> = (props) => {
       <main className="sm:flex h-screen max-h-screen min-h-screen">
         <div className={`flex flex-row w-full ${className || ''}`}>
           <SideBarAdmin />
-          <div className="py-2 px-8 grow">{children}</div>
+          <div className="ml-56 pt-2 pb-8 px-8 grow overflow-x-scroll">{children}</div>
         </div>
       </main>
     </>

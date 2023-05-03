@@ -1,18 +1,19 @@
 import { GetServerSideProps } from 'next'
 import { getCookie } from 'cookies-next'
 import AdminLayout from '@components/layouts/AdminLayout'
+import Title from '@components/common/Title'
+import { UserCreate } from '@components/screens/Admin/UserCreate'
 import { ROLE } from '@models/api/authentication/login'
 import { COOKIES_KEY } from '@models/keys'
 import { AccountInfo } from '@src/zustand/accountInfo'
 import { STATUS_ACCESS_TOKEN, checkAccessToken } from '@utils/accessToken'
 import { safeParseJSON } from '@utils/json'
-import Title from '@components/common/Title'
 
-const AdminPage = () => {
+const DetailUserPage = () => {
   return (
     <AdminLayout>
-      <Title title="Trang chủ admin" />
-      <div className="flex justify-center mt-2 ">Trang chủ admin</div>
+      <Title title="Thêm mới tài khoản" />
+      <UserCreate />
     </AdminLayout>
   )
 }
@@ -64,4 +65,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   }
 }
 
-export default AdminPage
+export default DetailUserPage
