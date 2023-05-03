@@ -37,7 +37,7 @@ export const register = async (
       }
     } else {
       const registerRawResponse = (await registerResponse.json()) as { error: Error }
-      return { success: false, response: null, error: registerRawResponse.error }
+      return { success: false, response: null, message: registerRawResponse.error.message }
     }
   } catch (error) {
     console.error('[register]: ', error)

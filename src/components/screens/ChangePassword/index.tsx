@@ -10,6 +10,7 @@ import { useLogOut } from '@hooks/useLogOut'
 import { useBoundStore } from '@src/zustand'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 import logger from '@utils/logger'
+import { ErrorFromNextApi } from '@models/api'
 
 export interface ChangePasswordForm {
   userId: string
@@ -34,7 +35,7 @@ const changePassword = async (input: { userId: string; email: string; newPasswor
       body: JSON.stringify({ ...input }),
       credentials: 'same-origin',
     })
-    const rawResponse = (await response.json()) as ServerResponse
+    const rawResponse = (await response.json()) as ServerResponse | ErrorFromNextApi
 
     return rawResponse
   } catch (error) {
@@ -64,6 +65,12 @@ export function ChangePasswordContainer() {
       if (data?.success && data?.response?.userId) {
         notify(NOTIFICATION_TYPE.SUCCESS, 'Đổi mật khẩu thành công')
         logOut()
+      } else {
+        logger.error('[changePassword]', (data as ErrorFromNextApi)?.message)
+        notify(
+          NOTIFICATION_TYPE.ERROR,
+          ERROR_MAPPING.get((data as ErrorFromNextApi)?.message ?? '') ?? DEFAULT_ERROR_MESSAGE,
+        )
       }
     },
     onError: (error: any) => {

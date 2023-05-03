@@ -28,6 +28,13 @@ export type Response<TData> = {
   message?: string
 }
 
+export type ErrorFromNextApi = {
+  success: boolean
+  response: null
+  error: boolean
+  message: string
+}
+
 export type Pagination = {
   startPage: number
   limit: number

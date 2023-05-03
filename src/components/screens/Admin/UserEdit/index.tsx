@@ -4,17 +4,18 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Button as OutlineButton } from 'flowbite-react'
 import { Input } from '@components/common/Authentication/Input'
 import { Button } from '@components/common/Button'
+import { PasswordInput } from '@components/common/Authentication/PasswordInput'
 import { ServerResponse as DetailUserServerResponse } from '@models/api/admin/detailUser'
 import {
   DEFAULT_ERROR_MESSAGE,
   ERROR_MAPPING,
   ServerResponse as UpdateUserServerResponse,
 } from '@models/api/admin/updateUser'
+import { ErrorFromNextApi } from '@models/api'
 import { User } from '@models/api/admin/getUsers'
 import { REACT_QUERY_KEY } from '@models/keys'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 import logger from '@utils/logger'
-import { PasswordInput } from '@components/common/Authentication/PasswordInput'
 
 type UserForm = Omit<User & { password: string }, 'role'>
 
@@ -46,8 +47,7 @@ const updateUser = async (input: { id: string; userId: string; password: string;
       body: JSON.stringify({ ...input }),
       credentials: 'same-origin',
     })
-    const rawResponse = (await response.json()) as UpdateUserServerResponse
-
+    const rawResponse = (await response.json()) as UpdateUserServerResponse | ErrorFromNextApi
     return rawResponse
   } catch (error) {
     logger.error('[fetchUser]', error)
@@ -84,12 +84,18 @@ export const UserEdit = () => {
   const { mutate, isLoading: isUpdating } = useMutation({
     mutationFn: updateUser,
     onSuccess: (data) => {
-      if (data && data.success && data.response.userId) {
+      if (data && data.success && data.response?.userId) {
         void queryClient.invalidateQueries([REACT_QUERY_KEY.ADMIN_GET_USERS])
         notify(NOTIFICATION_TYPE.SUCCESS, 'Cập nhật thông tin thành công')
         setTimeout(() => {
           void router.push('/admin/users')
         }, 2000)
+      } else {
+        logger.error('[updateUser]', (data as ErrorFromNextApi)?.message)
+        notify(
+          NOTIFICATION_TYPE.ERROR,
+          ERROR_MAPPING.get((data as ErrorFromNextApi)?.message ?? '') ?? DEFAULT_ERROR_MESSAGE,
+        )
       }
     },
     onError: (error: any) => {

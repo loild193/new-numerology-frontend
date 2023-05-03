@@ -29,7 +29,7 @@ export const detailUser = async (
       }
     } else {
       const detailUserRawResponse = (await detailUserResponse.json()) as { error: Error }
-      return { success: false, response: null, error: detailUserRawResponse.error }
+      return { success: false, response: null, message: detailUserRawResponse.error.message }
     }
   } catch (error) {
     console.error('[detailUser]: ', error)

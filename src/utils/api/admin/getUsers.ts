@@ -36,7 +36,7 @@ export const getUsers = async (
       }
     } else {
       const getUsersRawResponse = (await getUsersResponse.json()) as { error: Error }
-      return { success: false, response: null, error: getUsersRawResponse.error }
+      return { success: false, response: null, message: getUsersRawResponse.error.message }
     }
   } catch (error) {
     console.error('[getUsers]: ', error)

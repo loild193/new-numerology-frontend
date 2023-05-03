@@ -34,7 +34,7 @@ export const login = async (
       }
     } else {
       const loginRawResponse = (await loginResponse.json()) as { error: Error }
-      return { success: false, response: null, error: loginRawResponse.error }
+      return { success: false, response: null, message: loginRawResponse.error.message }
     }
   } catch (error) {
     console.error('[login]: ', error)

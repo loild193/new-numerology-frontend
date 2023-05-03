@@ -35,7 +35,7 @@ export const changePassword = async (
       }
     } else {
       const changePasswordRawResponse = (await changePasswordResponse.json()) as { error: Error }
-      return { success: false, response: null, error: changePasswordRawResponse.error }
+      return { success: false, response: null, message: changePasswordRawResponse.error.message }
     }
   } catch (error) {
     console.error('[changePassword]: ', error)

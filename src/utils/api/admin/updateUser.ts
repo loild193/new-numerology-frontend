@@ -40,7 +40,7 @@ export const updateUser = async (
       }
     } else {
       const updateUserRawResponse = (await updateUserResponse.json()) as { error: Error }
-      return { success: false, response: null, error: updateUserRawResponse.error }
+      return { success: false, response: null, message: updateUserRawResponse.error.message }
     }
   } catch (error) {
     console.error('[updateUser]: ', error)

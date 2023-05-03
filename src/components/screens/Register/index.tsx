@@ -40,8 +40,8 @@ export default function RegisterContainer() {
       if (data.success && data.response?.id) {
         notify(NOTIFICATION_TYPE.SUCCESS, 'Đăng ký tài khoản thành công. Vui lòng chờ liên hệ từ admin.')
       } else {
-        logger.error('[register]', data.error)
-        notify(NOTIFICATION_TYPE.ERROR, ERROR_MAPPING.get(data.error?.message ?? '') ?? DEFAULT_ERROR_MESSAGE)
+        logger.error('[register]', data.message)
+        notify(NOTIFICATION_TYPE.ERROR, ERROR_MAPPING.get(data.message ?? '') ?? DEFAULT_ERROR_MESSAGE)
       }
     },
     onError: (error: any) => {

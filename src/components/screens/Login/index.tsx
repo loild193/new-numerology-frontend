@@ -57,8 +57,8 @@ export default function LoginContainer() {
           }
         }, 2000)
       } else {
-        logger.error('[login]', data.error)
-        notify(NOTIFICATION_TYPE.ERROR, ERROR_MAPPING.get(data.error?.message ?? '') ?? DEFAULT_ERROR_MESSAGE)
+        logger.error('[login]', data.message)
+        notify(NOTIFICATION_TYPE.ERROR, ERROR_MAPPING.get(data?.message ?? '') ?? DEFAULT_ERROR_MESSAGE)
       }
     },
     onError: (error: any) => {
