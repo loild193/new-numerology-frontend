@@ -1,13 +1,14 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
+import { Spinner } from 'flowbite-react'
 import { Result } from '../Result'
-import { DAY, IResult, MONTH } from '@models/interface'
-import { lifePathIndex, soulIndex, personalityIndex, talentIndex, passionIndex } from '@utils/calculation'
-import { isValidDate } from '@utils/helper'
 import { Select } from './Select'
 import { Input } from '@components/common/Authentication/Input'
 import { Button } from '@components/common/Button'
+import { DAY, IResult, MONTH } from '@models/interface'
 import { ServerResponse } from '@models/api/user/search-numerology'
+import { lifePathIndex, soulIndex, personalityIndex, talentIndex, passionIndex } from '@utils/calculation'
+import { isValidDate } from '@utils/helper'
 import logger from '@utils/logger'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 
@@ -57,8 +58,6 @@ export function Main() {
       })
       const rawResponse = (await response.json()) as ServerResponse
 
-      console.log('raw Response: ', rawResponse)
-
       return rawResponse
     } catch (error) {
       logger.error('[searchNumerology]', error)
@@ -69,10 +68,14 @@ export function Main() {
     mutationFn: searchNumerology,
     onSuccess: (data) => {
       if (data?.success && data?.response?.userId) {
-        notify(NOTIFICATION_TYPE.SUCCESS, 'Kiểm tra thành công ')
+        notify(NOTIFICATION_TYPE.SUCCESS, 'Kiểm tra thành công')
+        onCalculateResult()
+      } else {
+        // FIXME: Correct type of data
+        if ((data as any)?.error?.message === 'Search amount is not enough') {
+          notify(NOTIFICATION_TYPE.ERROR, 'Bạn đã hết lượt tra cứu. Vui lòng liên hệ với admin')
+        }
       }
-
-      onCalculateResult()
     },
     onError: (error: any) => {
       logger.error('[searchNumerology]', error)
@@ -141,13 +144,17 @@ export function Main() {
     mutate({
       name: name.toLowerCase().trim(),
       birthday: dateOfBirth,
-      phone: '0123456789',
-      company: 'HBLAB',
+      phone: '0123123123',
+      company: 'Test',
     })
   }
 
+  const onGoTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
-    <div className="w-full py-[120px] min-h-screen overflow-auto max-xs:pt-[100px]">
+    <div className="w-full py-[100px] min-h-screen overflow-auto max-xs:pt-[100px]">
       <div className="max-w-[800px] mx-auto max-xs:px-8">
         <h1 className="text-3xl max-md:text-2xl font-semibold text-center mb-2 uppercase">META SALE SYSTEM </h1>
         <p className="mb-3 text-center">Hệ thống bán hàng từ tâm</p>
@@ -180,7 +187,7 @@ export function Main() {
 
           <div>
             <label htmlFor="year" className="block mb-2 text-sm font-medium">
-              Năm sinh:
+              Năm sinh
             </label>
             <input
               type="number"
@@ -207,23 +214,34 @@ export function Main() {
             <Button
               label="Xem kết quả"
               disabled={!!error.name || !!error.day || !!error.month || !!error.year || !!error.dateOfBirth}
-              loading={false}
-              loadingLabel=""
+              loading={isLoading}
+              loadingLabel="Đang xử lý"
               onClick={onSearchNumerology}
             />
           </div>
         </div>
 
-        {isLoading ? <div>Loading...</div> : null}
+        {isLoading ? (
+          <div className="w-full flex justify-center">
+            <Spinner />
+          </div>
+        ) : null}
 
         {result ? (
-          <Result
-            lifePath={result.lifePath}
-            soul={result.soul}
-            personality={result.personality}
-            talent={result.talent}
-            passion={result.passion}
-          />
+          <>
+            <Result
+              lifePath={result.lifePath}
+              soul={result.soul}
+              personality={result.personality}
+              talent={result.talent}
+              passion={result.passion}
+            />
+            <div className="flex justify-center mt-6">
+              <div className="max-w-[160px]">
+                <Button label="Tra cứu lại" loading={false} loadingLabel="" variant="no-background" onClick={onGoTop} />
+              </div>
+            </div>
+          </>
         ) : null}
       </div>
     </div>

@@ -19,7 +19,7 @@ const MainLayout: React.FC<Props> = (props) => {
   return (
     <>
       <HtmlHead {...props} />
-      <main className="sm:flex h-screen max-h-screen min-h-screen">
+      <main className="sm:flex">
         <div className={`flex-auto container-w overflow-y-auto ${className || ''}`}>
           <Header />
           {children}

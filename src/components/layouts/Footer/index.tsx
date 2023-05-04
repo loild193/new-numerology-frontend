@@ -15,10 +15,10 @@ export const Footer = React.memo(() => {
     <div className="w-full">
       <div className={`relative z-10 flex max-lg:flex-col justify-center mx-auto`}>
         <div
-          className="text-[#ffffff71] relative z-10 flex items-center py-[14px]
+          className="text-black relative z-10 flex items-center py-4
           justify-center text-center"
         >
-          {`Copyright © ${CURRENT_YEAR} | All Rights Reserved`}
+          {`Copyright ©MetaSale ${CURRENT_YEAR} | All Rights Reserved`}
         </div>
       </div>
     </div>
