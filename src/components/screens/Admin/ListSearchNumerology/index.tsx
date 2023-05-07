@@ -163,7 +163,7 @@ export const ListSearchNumerology: React.FC<Props> = ({ page, startPage, limit }
                 <Table.Cell>{record.userId}</Table.Cell>
                 <Table.Cell className="whitespace-nowrap dark:text-white">{record.name}</Table.Cell>
                 <Table.Cell className="font-medium text-gray-900">{record.birthday ?? '...'}</Table.Cell>
-                <Table.Cell>{record.company}</Table.Cell>
+                <Table.Cell>{record.company ?? '...'}</Table.Cell>
                 <Table.Cell>{record.phone ?? '...'}</Table.Cell>
                 <Table.Cell>{record.createdAt ? formatDate(record.createdAt) : '...'}</Table.Cell>
               </Table.Row>

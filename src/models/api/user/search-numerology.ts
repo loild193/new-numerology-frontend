@@ -1,8 +1,8 @@
 export type Input = {
   name: string
   birthday: string
-  phone: string
-  company: string
+  phone?: string
+  company?: string
   accessToken: string
 }
 
