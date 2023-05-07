@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import Avvvatars from 'avvvatars-react'
 import { Navbar, Dropdown } from 'flowbite-react'
 import { useLogOut } from '@hooks/useLogOut'
@@ -18,12 +19,8 @@ export const Header = () => {
   return (
     <Navbar fluid={true} rounded={true} className="border-b">
       <Navbar.Brand href="/">
-        <img
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-          className="mr-3 h-6 sm:h-9"
-          alt="Flowbite Logo"
-        />
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Kaido</span>
+        <Image src="/images/logo.png" alt="Logo" width={56} height={40} className="width-auto h-10 mr-2" />
+        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">TEAMDOM</span>
       </Navbar.Brand>
       {accountInfo.accessToken ? (
         <div className="flex md:order-2">
