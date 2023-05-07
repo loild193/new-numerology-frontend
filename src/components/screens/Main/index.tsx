@@ -11,12 +11,15 @@ import { lifePathIndex, soulIndex, personalityIndex, talentIndex, passionIndex }
 import { isValidDate } from '@utils/helper'
 import logger from '@utils/logger'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
+import { InputWithIcon } from '@components/common/InputWithIcon'
 
 interface IInformation {
   name: string
   day: string
   month: string
   year: number
+  phone?: string
+  company?: string
 }
 
 interface IInformationError {
@@ -43,10 +46,10 @@ export function Main() {
   })
   const [result, setResult] = useState<IResult>()
 
-  const { name, day, month, year } = information
+  const { name, day, month, year, phone, company } = information
   const dateOfBirth = `${day}/${month}/${year}`
 
-  const searchNumerology = async (input: { name: string; birthday: string; phone: string; company: string }) => {
+  const searchNumerology = async (input: { name: string; birthday: string; phone?: string; company?: string }) => {
     try {
       const response = await fetch('/api/user/search-numerology', {
         method: 'POST',
@@ -106,6 +109,13 @@ export function Main() {
     }))
   }
 
+  const onResetValueInformation = (name: string) => {
+    setInformation((prev) => ({
+      ...prev,
+      [name]: undefined,
+    }))
+  }
+
   const onCalculateResult = () => {
     const lifePath = lifePathIndex(dateOfBirth)
     const finalName = name.toLowerCase().trim()
@@ -144,8 +154,8 @@ export function Main() {
     mutate({
       name: name.toLowerCase().trim(),
       birthday: dateOfBirth,
-      phone: '0123123123',
-      company: 'Test',
+      phone: phone,
+      company: company,
     })
   }
 
@@ -165,6 +175,23 @@ export function Main() {
           errorMessage={error.name}
           onChange={onUpdateInformation}
         />
+
+        <div className="grid grid-cols-2 gap-x-6 max-xs:gap-x-4 relative mt-4">
+          <InputWithIcon
+            label="Số điện thoại"
+            name="phone"
+            value={phone ?? ''}
+            onChange={onUpdateInformation}
+            onClickButton={onResetValueInformation}
+          />
+          <InputWithIcon
+            label="Email"
+            name="company"
+            value={company ?? ''}
+            onChange={onUpdateInformation}
+            onClickButton={onResetValueInformation}
+          />
+        </div>
 
         <div className="grid grid-cols-3 gap-x-6 max-xs:gap-x-4 relative mt-4 pb-12">
           <Select

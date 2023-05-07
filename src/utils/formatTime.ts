@@ -18,3 +18,24 @@ export const fancyTimeFormat = (duration: number) => {
   ret += '' + secs
   return ret
 }
+
+export const formatDate = (strDate: string) => {
+  const d = new Date(strDate)
+
+  const formattedDate =
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    ('0' + d.getHours()).slice(-2) +
+    ':' +
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    ('0' + d.getMinutes()).slice(-2) +
+    ' ' +
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    ('0' + d.getDate()).slice(-2) +
+    '/' +
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    ('0' + (d.getMonth() + 1)).slice(-2) +
+    '/' +
+    d.getFullYear()
+
+  return formattedDate
+}

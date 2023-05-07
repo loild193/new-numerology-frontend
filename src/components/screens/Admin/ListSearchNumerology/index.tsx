@@ -1,23 +1,19 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
 import { Table, Pagination as Pagi } from 'flowbite-react'
-import { EditIcon, RemoveIcon } from '@components/common/Icon'
-import UsersFilter, { IUsersProps } from '@components/screens/Users/FilterUsers'
 import {
   DEFAULT_ERROR_MESSAGE,
   DEFAULT_ITEM_PER_PAGE,
   DEFAULT_START_PAGE,
   ERROR_MAPPING,
-  LIST_USER_FILTER,
   ServerResponse,
-} from '@models/api/admin/getUsers'
+} from '@models/api/admin/getSearchNumerologies'
 import { REACT_QUERY_KEY } from '@models/keys'
 import useChangeRoute from '@hooks/useChangeRoute'
-import { useDebounce } from '@hooks/useDebounce'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 import logger from '@utils/logger'
+import { formatDate } from '@utils/formatTime'
 
 type Page = {
   page: number
@@ -27,15 +23,13 @@ type Page = {
 
 type Props = {
   page: string
-  keyword: string
-  filter: LIST_USER_FILTER
   startPage: string
   limit: string
 }
 
-const fetchUsers = async (input: IUsersProps) => {
+const fetchSearchNumerologies = async (input: any) => {
   try {
-    const response = await fetch('/api/admin/users', {
+    const response = await fetch('/api/admin/search-numerologies', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -47,17 +41,14 @@ const fetchUsers = async (input: IUsersProps) => {
 
     return rawResponse
   } catch (error) {
-    logger.error('[fetchUsers]', error)
+    logger.error('[fetchSearchNumerologies]', error)
   }
 }
 
-export const UserManagement: React.FC<Props> = ({ page, keyword, filter, startPage, limit }) => {
+export const ListSearchNumerology: React.FC<Props> = ({ page, startPage, limit }) => {
   const router = useRouter()
+  const { id } = router.query
 
-  const [usersFilter, setUsersFilter] = useState<IUsersProps>({
-    keyword,
-    filter,
-  })
   const [currentPageStats, setCurrentPageStats] = useState<Page>({
     page: Number(page),
     startPage: Number(startPage),
@@ -65,26 +56,43 @@ export const UserManagement: React.FC<Props> = ({ page, keyword, filter, startPa
   })
 
   const { changeRoute } = useChangeRoute()
-  const debouncedKeyword = useDebounce(usersFilter.keyword, 500)
-
   const {
-    data: users,
+    data: searchRecords,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: [REACT_QUERY_KEY.ADMIN_GET_USERS, usersFilter.filter, debouncedKeyword, currentPageStats],
-    queryFn: () => fetchUsers({ ...usersFilter, keyword: debouncedKeyword, ...currentPageStats }),
+    queryKey: [REACT_QUERY_KEY.ADMIN_GET_SEARCH_NUMEROLOGIES, currentPageStats],
+    queryFn: () => fetchSearchNumerologies({ id, ...currentPageStats }),
     retry: 2,
     onError: (error: any) => {
-      logger.error('[fetchUsers]', error)
+      logger.error('[fetchSearchNumerologies]', error)
       notify(NOTIFICATION_TYPE.ERROR, ERROR_MAPPING.get((error?.message as string) ?? '') ?? DEFAULT_ERROR_MESSAGE)
     },
   })
 
+  //   const formatDate = (strDate: string) => {
+  //     const d = new Date(strDate)
+
+  //     const formattedDate =
+  //       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  //       ('0' + d.getHours()).slice(-2) +
+  //       ':' +
+  //       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  //       ('0' + d.getMinutes()).slice(-2) +
+  //       ' ' +
+  //       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  //       ('0' + d.getDate()).slice(-2) +
+  //       '/' +
+  //       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+  //       ('0' + (d.getMonth() + 1)).slice(-2) +
+  //       '/' +
+  //       d.getFullYear()
+
+  //     return formattedDate
+  //   }
+
   useEffect(() => {
     const page = (router.query?.page as string) ?? '1'
-    const keyword = (router.query?.keyword as string) ?? ''
-    const filter = (router.query?.filter as LIST_USER_FILTER) ?? LIST_USER_FILTER.ALL
     const startPage = (router.query?.startPage as string) ?? `${DEFAULT_START_PAGE}`
     const limit = (router.query?.limit as string) ?? `${DEFAULT_ITEM_PER_PAGE}`
     setCurrentPageStats({
@@ -92,7 +100,6 @@ export const UserManagement: React.FC<Props> = ({ page, keyword, filter, startPa
       startPage: Number(startPage),
       limit: Number(limit),
     })
-    setUsersFilter({ keyword, filter })
   }, [router.isReady])
 
   const handleChangePage = (page: number) => {
@@ -105,27 +112,20 @@ export const UserManagement: React.FC<Props> = ({ page, keyword, filter, startPa
     changeRoute(newPageStats)
   }
 
-  const listUsers = users?.response?.users
-  const pagination = users?.response?.pagination
+  const listSearchRecords = searchRecords?.response?.searchRecords
+  const pagination = searchRecords?.response?.pagination
 
   return (
     <>
-      <UsersFilter usersFilter={usersFilter} handleChangeValue={setUsersFilter} />
       <Table>
         <Table.Head>
           <Table.HeadCell>#</Table.HeadCell>
-          <Table.HeadCell>ID</Table.HeadCell>
-          <Table.HeadCell>Họ và tên</Table.HeadCell>
           <Table.HeadCell>Tên đăng nhập</Table.HeadCell>
+          <Table.HeadCell>Họ và tên</Table.HeadCell>
+          <Table.HeadCell>Ngày sinh</Table.HeadCell>
           <Table.HeadCell>Email</Table.HeadCell>
           <Table.HeadCell>Số điện thoại</Table.HeadCell>
-          <Table.HeadCell>Số lần tra cứu</Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Chỉnh sửa</span>
-          </Table.HeadCell>
-          <Table.HeadCell>
-            <span className="sr-only">Xoá</span>
-          </Table.HeadCell>
+          <Table.HeadCell>Ngày tra cứu</Table.HeadCell>
         </Table.Head>
         <Table.Body className="divide-y">
           {isLoading ? (
@@ -146,7 +146,7 @@ export const UserManagement: React.FC<Props> = ({ page, keyword, filter, startPa
               <Table.Cell />
             </Table.Row>
           ) : null}
-          {!listUsers || listUsers.length === 0 ? (
+          {!listSearchRecords || listSearchRecords.length === 0 ? (
             <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800 text-center text-xl">
               <Table.Cell />
               <Table.Cell />
@@ -155,51 +155,17 @@ export const UserManagement: React.FC<Props> = ({ page, keyword, filter, startPa
               <Table.Cell />
             </Table.Row>
           ) : null}
-          {listUsers &&
-            listUsers.length > 0 &&
-            listUsers.map((user, index) => (
+          {listSearchRecords &&
+            listSearchRecords.length > 0 &&
+            listSearchRecords.map((record, index) => (
               <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={index}>
                 <Table.Cell>{index + 1}</Table.Cell>
-                <Table.Cell>{user.id}</Table.Cell>
-                <Table.Cell className="whitespace-nowrap dark:text-white">
-                  <Link
-                    href={`/admin/users/${user.id}/search-numerology`}
-                    className="text-blue-600"
-                    title="Chỉnh sửa số lần tra cứu"
-                  >
-                    {user.username ?? 'Chưa có'}{' '}
-                  </Link>
-                </Table.Cell>
-                <Table.Cell className="font-medium text-gray-900">{user.userId ?? 'Chưa có'}</Table.Cell>
-                <Table.Cell>{user.email}</Table.Cell>
-                <Table.Cell>{user.phone ?? 'Chưa có'}</Table.Cell>
-                <Table.Cell>
-                  <Link
-                    href={`/admin/users/${user.id}/update-search-amount`}
-                    className="text-blue-600"
-                    title="Chỉnh sửa số lần tra cứu"
-                  >
-                    {user.searchAmountLeft ?? 'Chưa có'}{' '}
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link
-                    href={`/admin/users/${user.id}`}
-                    className="font-medium text-blue-600 cursor-pointer dark:text-blue-500
-                  transition hover:text-blue-400"
-                  >
-                    <EditIcon width="24px" height="24px" />
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link
-                    href={`/admin/users/${user.id}`}
-                    className="font-medium text-red-600 cursor-pointer dark:text-red-500
-                  transition hover:text-red-400"
-                  >
-                    <RemoveIcon width="24px" height="24px" />
-                  </Link>
-                </Table.Cell>
+                <Table.Cell>{record.userId}</Table.Cell>
+                <Table.Cell className="whitespace-nowrap dark:text-white">{record.name}</Table.Cell>
+                <Table.Cell className="font-medium text-gray-900">{record.birthday ?? '...'}</Table.Cell>
+                <Table.Cell>{record.company ?? '...'}</Table.Cell>
+                <Table.Cell>{record.phone ?? '...'}</Table.Cell>
+                <Table.Cell>{record.createdAt ? formatDate(record.createdAt) : '...'}</Table.Cell>
               </Table.Row>
             ))}
         </Table.Body>
