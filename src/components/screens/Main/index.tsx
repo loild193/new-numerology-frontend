@@ -12,6 +12,7 @@ import { isValidDate } from '@utils/helper'
 import logger from '@utils/logger'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 import { InputWithIcon } from '@components/common/InputWithIcon'
+import { useBoundStore } from '@src/zustand'
 
 interface IInformation {
   name: string
@@ -31,6 +32,10 @@ interface IInformationError {
 }
 
 export function Main() {
+  const { searchAmountLeft, updateSearchAmountLeft } = useBoundStore((store) => ({
+    searchAmountLeft: store.accountInfo.searchAmountLeft,
+    updateSearchAmountLeft: store.updateSearchAmountLeft,
+  }))
   const [information, setInformation] = useState<IInformation>({
     name: '-1',
     day: '01',
@@ -73,6 +78,7 @@ export function Main() {
       if (data?.success && data?.response?.userId) {
         notify(NOTIFICATION_TYPE.SUCCESS, 'Kiểm tra thành công')
         onCalculateResult()
+        updateSearchAmountLeft({ searchAmountLeft: searchAmountLeft - 1 })
       } else {
         // FIXME: Correct type of data
         if ((data as any)?.error?.message === 'Search amount is not enough') {
@@ -235,6 +241,12 @@ export function Main() {
             <p className="absolute bottom-[14px] left-0 text-red-500 text-sm">{error.dateOfBirth}</p>
           ) : null}
         </div>
+
+        {searchAmountLeft >= 0 ? (
+          <p className="text-center mb-4">
+            Số lần tra cứu còn lại: <span className="text-xl font-sem\">{searchAmountLeft}</span>
+          </p>
+        ) : null}
 
         <div className="flex justify-center">
           <div className="max-w-[160px]">

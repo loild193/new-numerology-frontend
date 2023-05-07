@@ -13,6 +13,7 @@ export type ServerResponse = {
   username: string
   email: string
   role: ROLE
+  searchAmountLeft: number
   accessToken: string
 }
 

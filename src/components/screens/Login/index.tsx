@@ -42,9 +42,15 @@ export default function LoginContainer() {
     mutationFn: login,
     onSuccess: (data) => {
       if (data.success && data.response?.accessToken && data.response?.userId) {
-        const { userId, username, email, role, accessToken } = data.response
+        const { userId, username, email, searchAmountLeft, role, accessToken } = data.response
 
-        const accountInfo: AccountInfo = { userId, username, email, accessToken }
+        const accountInfo: AccountInfo = {
+          userId,
+          username,
+          email,
+          searchAmountLeft: searchAmountLeft ?? -1,
+          accessToken,
+        }
         saveAccountInfo(accountInfo)
         setCookie(COOKIES_KEY.ACCOUNT_INFO, accountInfo)
 

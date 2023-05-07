@@ -8,8 +8,11 @@ type StoreSlice = AccountInfoSlice
 const ZUSTAND_STORAGE_NAME = 'zustand.new_numerology'
 
 const emptyState: StoreSlice = {
-  accountInfo: { email: '', username: '', userId: '', accessToken: '' },
+  accountInfo: { email: '', username: '', userId: '', searchAmountLeft: -1, accessToken: '' },
   saveAccountInfo() {
+    return
+  },
+  updateSearchAmountLeft() {
     return
   },
   removeAccountInfo() {

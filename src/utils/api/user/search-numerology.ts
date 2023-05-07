@@ -15,7 +15,7 @@ export const searchNumerology = async (
   }
 
   try {
-    const updateBody: Record<string, string | number> = { name, phone, birthday, company }
+    const updateBody: Record<string, string | number | undefined> = { name, phone, birthday, company }
     const searchNumerologyResponse = await fetch(`${API_ENDPOINT}/api/v1/users/search-numerology`, {
       method: 'POST',
       headers: {
