@@ -83,6 +83,9 @@ export function Main() {
         // FIXME: Correct type of data
         if ((data as any)?.error?.message === 'Search amount is not enough') {
           notify(NOTIFICATION_TYPE.ERROR, 'Bạn đã hết lượt tra cứu. Vui lòng liên hệ với admin')
+        } else {
+          logger.error('[searchNumerology]', error)
+          notify(NOTIFICATION_TYPE.ERROR, 'Có lỗi xảy ra!')
         }
       }
     },
@@ -226,8 +229,8 @@ export function Main() {
               type="number"
               name="year"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-            focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
-            dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            focus:ring-primary-900 focus:border-primary-900 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600
+            dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-900 dark:focus:border-primary-900"
               required
               min={1000}
               max={3000}

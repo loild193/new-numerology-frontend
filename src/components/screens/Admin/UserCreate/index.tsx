@@ -12,6 +12,7 @@ import {
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 import logger from '@utils/logger'
 import { PasswordInput } from '@components/common/Authentication/PasswordInput'
+import { ErrorFromNextApi } from '@models/api'
 
 type UserForm = {
   username: string
@@ -39,7 +40,7 @@ const createUser = async (input: {
       body: JSON.stringify({ ...input }),
       credentials: 'same-origin',
     })
-    const rawResponse = (await response.json()) as CreateUserServerResponse
+    const rawResponse = (await response.json()) as CreateUserServerResponse | ErrorFromNextApi
 
     return rawResponse
   } catch (error) {
@@ -62,11 +63,17 @@ export const UserCreate = () => {
   const { mutate, isLoading: isUpdating } = useMutation({
     mutationFn: createUser,
     onSuccess: (data) => {
-      if (data && data.success && data.response.userId) {
+      if (data && data.success && data?.response?.userId) {
         notify(NOTIFICATION_TYPE.SUCCESS, 'Thêm tài khoản thành công')
         setTimeout(() => {
           void router.push('/admin/users')
         }, 2000)
+      } else {
+        logger.error('[register]', (data as ErrorFromNextApi)?.message)
+        notify(
+          NOTIFICATION_TYPE.ERROR,
+          ERROR_MAPPING.get((data as ErrorFromNextApi).message ?? '') ?? DEFAULT_ERROR_MESSAGE,
+        )
       }
     },
     onError: (error: any) => {

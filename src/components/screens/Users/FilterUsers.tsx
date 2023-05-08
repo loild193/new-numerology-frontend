@@ -38,7 +38,7 @@ export default function UsersFilter({ usersFilter, handleChangeValue }: IUsersFi
   }
 
   return (
-    <div className="mb-8 bg-slate-100 rounded-lg px-4 py-4">
+    <div className="mb-8 bg-gray-100 rounded-lg px-4 py-4">
       <div>Tìm kiếm</div>
       <div className="grid grid-cols-2 gap-4 my-4">
         <Input

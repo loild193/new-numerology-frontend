@@ -46,7 +46,7 @@ export const createUser = async (
       }
     } else {
       const createUserRawResponse = (await createUserResponse.json()) as { error: Error }
-      return { success: false, response: null, error: createUserRawResponse.error }
+      return { success: false, response: null, message: createUserRawResponse.error.message }
     }
   } catch (error) {
     console.error('[createUser]: ', error)
