@@ -59,5 +59,12 @@ module.exports = {
       100: 100,
       auto: 'auto',
     },
+    colors: {
+      primary: {
+        900: '#fd6262',
+        600: '#fa9393',
+        400: '#fa9d9d',
+      },
+    },
   },
 }

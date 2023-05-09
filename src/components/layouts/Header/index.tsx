@@ -44,7 +44,7 @@ export const Header = () => {
       ) : null}
       <Navbar.Collapse>
         <Navbar.Link href="/" active={true}>
-          Trang chủ
+          <span className="text-primary-900">Trang chủ</span>
         </Navbar.Link>
       </Navbar.Collapse>
     </Navbar>

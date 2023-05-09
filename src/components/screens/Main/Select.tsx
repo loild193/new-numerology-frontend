@@ -18,9 +18,9 @@ export const Select: React.FC<Props> = ({ label, name, value, options, errorMess
       <select
         name={name}
         className="appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg
-               focus:ring-blue-500 focus:border-blue-500 block w-full p-3
+               focus:ring-primary-900 focus:border-primary-900 block w-full p-3
               dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
-               dark:focus:border-blue-500
+               dark:focus:border-primary-900
               max-xs:text-xs max-xs:px-[6px]"
         value={value}
         onChange={onChange}
