@@ -9,7 +9,7 @@ dependencies:
     version: 4.29.5(react-dom@18.2.0)(react@18.2.0)
   avvvatars-react:
     specifier: ^0.4.2
-    version: 0.4.2(csstype@3.1.1)(react-dom@18.2.0)(react@18.2.0)
+    version: 0.4.2(csstype@3.1.2)(react-dom@18.2.0)(react@18.2.0)
   cookies-next:
     specifier: ^2.1.1
     version: 2.1.1
@@ -91,16 +91,16 @@ devDependencies:
     specifier: ^0.7.36
     version: 0.7.36
   '@typescript-eslint/eslint-plugin':
-    specifier: ^5.42.1
+    specifier: ^5.44.0
     version: 5.44.0(@typescript-eslint/parser@5.44.0)(eslint@8.28.0)(typescript@4.8.4)
   '@typescript-eslint/parser':
-    specifier: ^5.42.1
+    specifier: ^5.44.0
     version: 5.44.0(eslint@8.28.0)(typescript@4.8.4)
   autoprefixer:
     specifier: ^10.4.13
     version: 10.4.13(postcss@8.4.19)
   eslint:
-    specifier: ^8.27.0
+    specifier: ^8.28.0
     version: 8.28.0
   eslint-config-next:
     specifier: 13.0.2
@@ -115,16 +115,16 @@ devDependencies:
     specifier: ^4.2.1
     version: 4.2.1(eslint-config-prettier@8.5.0)(eslint@8.28.0)(prettier@2.7.1)
   husky:
-    specifier: ^8.0.0
+    specifier: ^8.0.2
     version: 8.0.2
   postcss:
-    specifier: ^8.4.18
+    specifier: ^8.4.19
     version: 8.4.19
   prettier:
     specifier: ^2.7.1
     version: 2.7.1
   stylelint:
-    specifier: ^14.14.1
+    specifier: ^14.15.0
     version: 14.15.0
   stylelint-config-prettier:
     specifier: ^9.0.4
@@ -133,7 +133,7 @@ devDependencies:
     specifier: ^29.0.0
     version: 29.0.0(stylelint@14.15.0)
   tailwindcss:
-    specifier: ^3.2.2
+    specifier: ^3.2.4
     version: 3.2.4(postcss@8.4.19)
   typescript:
     specifier: 4.8.4
@@ -894,7 +894,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.4
-      caniuse-lite: 1.0.30001434
+      caniuse-lite: 1.0.30001488
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -902,13 +902,13 @@ packages:
       postcss-value-parser: 4.2.0
     dev: true
 
-  /avvvatars-react@0.4.2(csstype@3.1.1)(react-dom@18.2.0)(react@18.2.0):
+  /avvvatars-react@0.4.2(csstype@3.1.2)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-D/bnSM+P6pQi71dFeFVqQsqmv+ct5XG7uO2lvJoiksALpXLd6kPgpRR1SUQxFZJkJNrkmg0NPgbhIgJgOsDYRQ==}
     peerDependencies:
       react: '>= 16'
       react-dom: '>= 16'
     dependencies:
-      goober: 2.1.13(csstype@3.1.1)
+      goober: 2.1.13(csstype@3.1.2)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     transitivePeerDependencies:
@@ -992,7 +992,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001434
+      caniuse-lite: 1.0.30001488
       electron-to-chromium: 1.4.284
       node-releases: 2.0.6
       update-browserslist-db: 1.0.10(browserslist@4.21.4)
@@ -1040,8 +1040,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite@1.0.30001434:
-    resolution: {integrity: sha512-aOBHrLmTQw//WFa2rcF1If9fa3ypkC1wzqqiKHgfdrXTWcU8C4gKVZT77eQAPWN1APys3+uQ0Df07rKauXGEYA==}
+  /caniuse-lite@1.0.30001488:
+    resolution: {integrity: sha512-NORIQuuL4xGpIy6iCCQGN4iFjlBXtfKWIenlUuyZJumLRIindLb7wXM+GO8erEhb7vXfcnf4BAg2PrSDN5TNLQ==}
 
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -1199,6 +1199,11 @@ packages:
 
   /csstype@3.1.1:
     resolution: {integrity: sha512-DJR/VvkAvSZW9bTouZue2sSxDwdTN92uHjqeKVm+0dAqdfNykRzQ95tay8aXMBAAPpUiq4Qcug2L7neoRh2Egw==}
+    dev: true
+
+  /csstype@3.1.2:
+    resolution: {integrity: sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==}
+    dev: false
 
   /d@1.0.1:
     resolution: {integrity: sha512-m62ShEObQ39CfralilEQRjH6oAMtNCV1xJyEx5LpRYUVN+EviphDgUc/F3hnYbADmkiNs67Y+3ylmlG7Lnu+FA==}
@@ -2090,12 +2095,12 @@ packages:
     resolution: {integrity: sha512-xYfnw62CKG8nLkZBfWbhWwDw02CHty86jfPcc2cr3ZfeuK9ysoVPPEUxf21bAD/rWAgk52SuBrLJlefNy8mvFg==}
     dev: true
 
-  /goober@2.1.13(csstype@3.1.1):
+  /goober@2.1.13(csstype@3.1.2):
     resolution: {integrity: sha512-jFj3BQeleOoy7t93E9rZ2de+ScC4lQICLwiAQmKMg9F6roKGaLSHoCDYKkWlSafg138jejvq/mTdvmnwDQgqoQ==}
     peerDependencies:
       csstype: ^3.0.10
     dependencies:
-      csstype: 3.1.1
+      csstype: 3.1.2
     dev: false
 
   /grapheme-splitter@1.0.4:
@@ -2692,7 +2697,7 @@ packages:
     dependencies:
       '@next/env': 13.0.2
       '@swc/helpers': 0.4.11
-      caniuse-lite: 1.0.30001434
+      caniuse-lite: 1.0.30001488
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
