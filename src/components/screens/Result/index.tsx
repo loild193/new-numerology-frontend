@@ -72,8 +72,8 @@ export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent,
         >
           {data.map((element) => (
             <div key={element.name} className="mb-8">
-              <div className="mb-4 font-bold text-lg">{element.name}</div>
-              <p className="text-base whitespace-pre-line break-words">{element.value}</p>
+              {/* <div className="mb-4 font-bold text-lg">{element.name}</div> */}
+              <div className="text-base break-words" dangerouslySetInnerHTML={{ __html: element.value as string }} />
             </div>
           ))}
         </div>
