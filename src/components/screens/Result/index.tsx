@@ -3,6 +3,7 @@ import React from 'react'
 import { Button } from 'flowbite-react'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
+import htmlToPdfmake from 'html-to-pdfmake'
 import { IResult } from '@models/interface'
 import { MAPPING as LIFE_PATH_MAPPING } from '@models/searchResult/lifePath'
 import { MAPPING as SOUL_MAPPING } from '@models/searchResult/soul'
@@ -29,23 +30,12 @@ function exportResultListPdf(
     pageSize: 'A4',
     pageOrientation: 'portrait',
     pageMargins: [40, 20, 20, 40],
-    content: [
-      ...data.map((doc) => [
-        { text: doc.name, style: 'header' },
-        { text: '\n' },
-        { text: doc.value, style: 'paragraph' },
-        { text: '\n\n' },
-      ]),
-    ],
+    content: [...data.map((doc) => [{ text: htmlToPdfmake(doc.value), style: 'paragraph' }, { text: '\n\n' }])],
     styles: {
-      header: {
-        bold: true,
-        fontSize: 18,
-        color: '#fc6262',
-      },
       paragraph: {
         fontSize: 14,
-        color: '#9ca3af',
+        color: '#0a0a0a',
+        lineHeight: 1.5,
       },
     },
   }
@@ -81,7 +71,7 @@ export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent,
           {data.map((element) => (
             <div key={element.name} className="mb-8">
               {/* <div className="mb-4 font-bold text-lg">{element.name}</div> */}
-              <div className="text-base break-words" dangerouslySetInnerHTML={{ __html: element.value as string }} />
+              <div className="text-base break-words" dangerouslySetInnerHTML={{ __html: element.value }} />
             </div>
           ))}
         </div>
