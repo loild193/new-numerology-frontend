@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
 import React from 'react'
 import { Button } from 'flowbite-react'
 import pdfMake from 'pdfmake/build/pdfmake'
@@ -8,6 +9,13 @@ import { MAPPING as SOUL_MAPPING } from '@models/searchResult/soul'
 import { MAPPING as PERSONALITY_MAPPING } from '@models/searchResult/personality'
 import { MAPPING as TALENT_MAPPING } from '@models/searchResult/talent'
 import { MAPPING as PASSION_MAPPING } from '@models/searchResult/passion'
+import {
+  defaultLifePath,
+  defaultPassion,
+  defaultPersonality,
+  defaultSoul,
+  defaultTalent,
+} from '@models/searchResult/defaultTitle'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
@@ -48,11 +56,11 @@ function exportResultListPdf(
 export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent, passion }) => {
   const passionParagraph = passion.map((index) => PASSION_MAPPING.get(index))
   const data = [
-    { name: 'Chân dung khách hàng', value: LIFE_PATH_MAPPING.get(lifePath) },
-    { name: 'Tứ huyệt cảm xúc', value: SOUL_MAPPING.get(soul) },
-    { name: 'Thiết lập mối quan hệ với khách hàng', value: PERSONALITY_MAPPING.get(personality) },
-    { name: 'Chăm sóc', value: TALENT_MAPPING.get(talent) },
-    { name: 'Đam mê', value: passionParagraph.join('\n') },
+    { name: 'Chân dung khách hàng', value: defaultLifePath + LIFE_PATH_MAPPING.get(lifePath) },
+    { name: 'Tứ huyệt cảm xúc', value: defaultSoul + SOUL_MAPPING.get(soul) },
+    { name: 'Thiết lập mối quan hệ với khách hàng', value: defaultPersonality + PERSONALITY_MAPPING.get(personality) },
+    { name: 'Chăm sóc', value: defaultTalent + TALENT_MAPPING.get(talent) },
+    { name: 'Đam mê', value: defaultPassion + passionParagraph.join('\n') },
   ]
 
   const exportPDF = () => {
