@@ -23,7 +23,7 @@
     "flowbite": "^1.6.5",
     "flowbite-react": "^0.4.3",
     "html-to-pdfmake": "^2.4.20",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "logt": "^1.4.5",
     "lru-cache": "^7.14.1",
     "memory-cache": "^0.2.0",
@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "@types/html-to-pdfmake": "^2.4.1",
-    "@types/jsonwebtoken": "^8.5.9",
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/memory-cache": "^0.2.2",
     "@types/node": "18.11.9",
     "@types/pdfmake": "^0.2.2",

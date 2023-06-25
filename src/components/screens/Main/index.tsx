@@ -1,18 +1,20 @@
 import { ChangeEvent, useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
 import { useMutation } from '@tanstack/react-query'
 import { Spinner } from 'flowbite-react'
-import { Result } from '../Result'
 import { Select } from './Select'
 import { Input } from '@components/common/Authentication/Input'
 import { Button } from '@components/common/Button'
+import { InputWithIcon } from '@components/common/InputWithIcon'
 import { DAY, IResult, MONTH } from '@models/interface'
 import { ServerResponse } from '@models/api/user/search-numerology'
+import { useBoundStore } from '@src/zustand'
 import { lifePathIndex, soulIndex, personalityIndex, talentIndex, passionIndex } from '@utils/calculation'
 import { isValidDate } from '@utils/helper'
 import logger from '@utils/logger'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
-import { InputWithIcon } from '@components/common/InputWithIcon'
-import { useBoundStore } from '@src/zustand'
+
+const Result = dynamic(() => import('@components/screens/Result').then((mod) => mod.Result))
 
 interface IInformation {
   name: string
