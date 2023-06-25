@@ -39,6 +39,7 @@
     "zustand": "^4.1.4"
   },
   "devDependencies": {
+    "@types/html-to-pdfmake": "^2.4.1",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/memory-cache": "^0.2.2",
     "@types/node": "18.11.9",

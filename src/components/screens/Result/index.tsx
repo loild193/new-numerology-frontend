@@ -1,36 +1,67 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import React from 'react'
+import Image from 'next/image'
 import { Button } from 'flowbite-react'
 import pdfMake from 'pdfmake/build/pdfmake'
 import pdfFonts from 'pdfmake/build/vfs_fonts'
-import htmlToPdfmake from 'html-to-pdfmake'
 import { IResult } from '@models/interface'
-import { MAPPING as LIFE_PATH_MAPPING } from '@models/searchResult/lifePath'
-import { MAPPING as SOUL_MAPPING } from '@models/searchResult/soul'
-import { MAPPING as PERSONALITY_MAPPING } from '@models/searchResult/personality'
-import { MAPPING as TALENT_MAPPING } from '@models/searchResult/talent'
-import { MAPPING as PASSION_MAPPING } from '@models/searchResult/passion'
-import {
-  defaultLifePath,
-  defaultPassion,
-  defaultPersonality,
-  defaultSoul,
-  defaultTalent,
-} from '@models/searchResult/defaultTitle'
+import { MAPPING_IMAGE_BASE64 } from '@utils/encoding'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs
 
+const DEFAULT_CONTENT = [
+  {
+    image: MAPPING_IMAGE_BASE64.get('/result/template/0a.png'),
+    alt: 'Lời giới thiệu',
+    width: 525,
+    height: 750,
+  },
+  {
+    image: MAPPING_IMAGE_BASE64.get('/result/template/0b.png'),
+    alt: 'Giới thiệu công ty',
+    width: 525,
+    height: 750,
+  },
+  {
+    image: MAPPING_IMAGE_BASE64.get('/result/template/0c.png'),
+    alt: 'Giới thiệu công ty',
+    width: 525,
+    height: 750,
+  },
+  {
+    image: MAPPING_IMAGE_BASE64.get('/result/template/0d.png'),
+    alt: 'Mục lục',
+    width: 525,
+    height: 750,
+  },
+  {
+    image: MAPPING_IMAGE_BASE64.get('/result/template/1.png'),
+    alt: 'Chân dung khách hàng',
+    width: 525,
+    height: 750,
+  },
+]
+
+enum CONTENT_LABEL {
+  LIFE_PATH = 1,
+  SOUL,
+  PERSONALITY,
+  TALENT,
+  PASSION,
+}
+
 function exportResultListPdf(
-  data: {
-    name: string
-    value: string | undefined
+  content: {
+    image: string | undefined
+    width: number
+    height: number
   }[],
 ) {
   const docDefinitions = {
     pageSize: 'A4',
     pageOrientation: 'portrait',
     pageMargins: [40, 20, 20, 40],
-    content: [...data.map((doc) => [{ text: htmlToPdfmake(doc.value), style: 'paragraph' }, { text: '\n\n' }])],
+    content,
     styles: {
       paragraph: {
         fontSize: 14,
@@ -44,17 +75,112 @@ function exportResultListPdf(
 }
 
 export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent, passion }) => {
-  const passionParagraph = passion.map((index) => PASSION_MAPPING.get(index))
   const data = [
-    { name: 'Chân dung khách hàng', value: defaultLifePath + LIFE_PATH_MAPPING.get(lifePath) },
-    { name: 'Tứ huyệt cảm xúc', value: defaultSoul + SOUL_MAPPING.get(soul) },
-    { name: 'Thiết lập mối quan hệ với khách hàng', value: defaultPersonality + PERSONALITY_MAPPING.get(personality) },
-    { name: 'Chăm sóc', value: defaultTalent + TALENT_MAPPING.get(talent) },
-    { name: 'Đam mê', value: defaultPassion + passionParagraph.join('\n') },
+    {
+      type: CONTENT_LABEL.LIFE_PATH,
+      alt: 'Chân dung khách hàng',
+      values: [`/result/life-path/1-${lifePath}a.png`, `/result/life-path/1-${lifePath}b.png`],
+    },
+    {
+      type: CONTENT_LABEL.SOUL,
+      alt: 'Tứ huyệt cảm xúc',
+      values: [`/result/soul/2-${soul}a.png`, `/result/soul/2-${soul}b.png`],
+    },
+    {
+      type: CONTENT_LABEL.PERSONALITY,
+      alt: 'Thiết lập mối quan hệ với khách hàng',
+      values: [`/result/personality/3-${personality}.png`],
+    },
+    { type: CONTENT_LABEL.TALENT, alt: 'Chăm sóc khách hàng', values: [`/result/talent/4-${talent}.png`] },
+    { type: CONTENT_LABEL.PASSION, alt: 'Đam mê khách hàng', values: [`/result/passion/5-${passion}.png`] },
   ]
 
+  const content = [...DEFAULT_CONTENT]
+
+  for (const dataObject of data) {
+    if (dataObject.type === CONTENT_LABEL.LIFE_PATH) {
+      const newLifePathImages = dataObject.values.map((value) => ({
+        image: MAPPING_IMAGE_BASE64.get(value),
+        alt: 'Chân dung khách hàng',
+        width: 525,
+        height: 750,
+      }))
+      content.push(...newLifePathImages)
+    } else if (dataObject.type === CONTENT_LABEL.SOUL) {
+      const newSoulImages = dataObject.values.map((value) => ({
+        image: MAPPING_IMAGE_BASE64.get(value),
+        alt: 'Tứ huyệt cảm xúc',
+        width: 525,
+        height: 750,
+      }))
+      content.push(
+        {
+          image: MAPPING_IMAGE_BASE64.get('/result/template/2.png'),
+          alt: 'Tứ huyệt cảm xúc',
+          width: 525,
+          height: 750,
+        },
+        ...newSoulImages,
+      )
+    } else if (dataObject.type === CONTENT_LABEL.PERSONALITY) {
+      const newPersonalityImages = dataObject.values.map((value) => ({
+        image: MAPPING_IMAGE_BASE64.get(value),
+        alt: 'Thiết lập mối quan hệ với khách hàng',
+        width: 525,
+        height: 750,
+      }))
+      content.push(
+        {
+          image: MAPPING_IMAGE_BASE64.get('/result/template/3.png'),
+          alt: 'Thiết lập mối quan hệ với khách hàng',
+          width: 525,
+          height: 750,
+        },
+        ...newPersonalityImages,
+      )
+    } else if (dataObject.type === CONTENT_LABEL.TALENT) {
+      const newTalentImages = dataObject.values.map((value) => ({
+        image: MAPPING_IMAGE_BASE64.get(value),
+        alt: 'Chăm sóc khách hàng',
+        width: 525,
+        height: 750,
+      }))
+      content.push(
+        {
+          image: MAPPING_IMAGE_BASE64.get('/result/template/4.png'),
+          alt: 'Chăm sóc khách hàng',
+          width: 525,
+          height: 750,
+        },
+        ...newTalentImages,
+      )
+    } else {
+      const newPassionImages = dataObject.values.map((value) => ({
+        image: MAPPING_IMAGE_BASE64.get(value),
+        alt: 'Đam mê của khách hàng',
+        width: 525,
+        height: 750,
+      }))
+      content.push(
+        {
+          image: MAPPING_IMAGE_BASE64.get('/result/template/5.png'),
+          alt: 'Đam mê của khách hàng',
+          width: 525,
+          height: 750,
+        },
+        ...newPassionImages,
+        {
+          image: MAPPING_IMAGE_BASE64.get('/result/template/6.png'),
+          alt: 'Kết thúc',
+          width: 525,
+          height: 750,
+        },
+      )
+    }
+  }
+
   const exportPDF = () => {
-    exportResultListPdf(data)
+    exportResultListPdf(content)
   }
 
   return (
@@ -68,10 +194,16 @@ export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent,
           text-sm text-left text-gray-500 dark:text-gray-400
           "
         >
-          {data.map((element) => (
-            <div key={element.name} className="mb-8">
-              {/* <div className="mb-4 font-bold text-lg">{element.name}</div> */}
-              <div className="text-base break-words" dangerouslySetInnerHTML={{ __html: element.value }} />
+          {content.map((element, index) => (
+            <div key={index} className="mb-8">
+              <Image
+                key={`${element.alt}-${index}`}
+                src={element.image as string}
+                alt={element.alt}
+                width={707}
+                height={1000}
+                className="aspect-auto"
+              />
             </div>
           ))}
         </div>
