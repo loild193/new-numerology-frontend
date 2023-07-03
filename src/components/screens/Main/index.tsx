@@ -14,7 +14,18 @@ import { isValidDate } from '@utils/helper'
 import logger from '@utils/logger'
 import { NOTIFICATION_TYPE, notify } from '@utils/notify'
 
-const Result = dynamic(() => import('@components/screens/Result').then((mod) => mod.Result))
+const Loading = () => {
+  return (
+    <div className="flex justify-center items-center py-6 gap-x-3">
+      <Spinner />
+      <p className="text-sm">Đang xuất kết quả, vui lòng chờ trong giây lát...</p>
+    </div>
+  )
+}
+
+const Result = dynamic(() => import('@components/screens/Result').then((mod) => mod.Result), {
+  loading: () => <Loading />,
+})
 
 interface IInformation {
   name: string
