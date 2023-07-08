@@ -1,10 +1,5 @@
-import { MAPPING_LIFE_PATH_IMAGE_BASE64 } from '@models/mapping/lifePath'
 import { DEFAULT_CONTENT } from './encoding'
-import { MAPPING_SOUL_IMAGE_BASE64 } from '@models/mapping/soul'
 import { MAPPING_TEMPLATE_IMAGE_BASE64 } from '@models/mapping/template'
-import { MAPPING_PERSONALITY_IMAGE_BASE64 } from '@models/mapping/personality'
-import { MAPPING_TALENT_IMAGE_BASE64 } from '@models/mapping/talent'
-import { MAPPING_PASSION_IMAGE_BASE64 } from '@models/mapping/passion'
 
 export enum CONTENT_LABEL {
   LIFE_PATH = 1,
@@ -14,7 +9,7 @@ export enum CONTENT_LABEL {
   PASSION,
 }
 
-export const getExportImages = ({
+export const getExportImages = async ({
   data,
 }: {
   data: {
@@ -23,12 +18,21 @@ export const getExportImages = ({
     values: string[]
   }[]
 }) => {
+  let imageBase64: Record<string, string> = {}
+  try {
+    const imagesBase64Response = await fetch('/api/images')
+    const rawImagesBase64Response = await imagesBase64Response.json()
+    imageBase64 = JSON.parse((rawImagesBase64Response as string) || '{}')
+  } catch (error) {
+    console.log('Fetch image data error', error)
+    return []
+  }
   const content = [...DEFAULT_CONTENT]
 
   for (const dataObject of data) {
     if (dataObject.type === CONTENT_LABEL.LIFE_PATH) {
       const newLifePathImages = dataObject.values.map((value) => ({
-        image: MAPPING_LIFE_PATH_IMAGE_BASE64.get(value),
+        image: imageBase64[value],
         alt: 'Chân dung khách hàng',
         width: 525,
         height: 750,
@@ -36,7 +40,7 @@ export const getExportImages = ({
       content.push(...newLifePathImages)
     } else if (dataObject.type === CONTENT_LABEL.SOUL) {
       const newSoulImages = dataObject.values.map((value) => ({
-        image: MAPPING_SOUL_IMAGE_BASE64.get(value),
+        image: imageBase64[value],
         alt: 'Tứ huyệt cảm xúc',
         width: 525,
         height: 750,
@@ -52,7 +56,7 @@ export const getExportImages = ({
       )
     } else if (dataObject.type === CONTENT_LABEL.PERSONALITY) {
       const newPersonalityImages = dataObject.values.map((value) => ({
-        image: MAPPING_PERSONALITY_IMAGE_BASE64.get(value),
+        image: imageBase64[value],
         alt: 'Thiết lập mối quan hệ với khách hàng',
         width: 525,
         height: 750,
@@ -68,7 +72,7 @@ export const getExportImages = ({
       )
     } else if (dataObject.type === CONTENT_LABEL.TALENT) {
       const newTalentImages = dataObject.values.map((value) => ({
-        image: MAPPING_TALENT_IMAGE_BASE64.get(value),
+        image: imageBase64[value],
         alt: 'Chăm sóc khách hàng',
         width: 525,
         height: 750,
@@ -84,7 +88,7 @@ export const getExportImages = ({
       )
     } else {
       const newPassionImages = dataObject.values.map((value) => ({
-        image: MAPPING_PASSION_IMAGE_BASE64.get(value),
+        image: imageBase64[value],
         alt: 'Đam mê của khách hàng',
         width: 525,
         height: 750,
@@ -106,6 +110,5 @@ export const getExportImages = ({
       )
     }
   }
-
   return content
 }

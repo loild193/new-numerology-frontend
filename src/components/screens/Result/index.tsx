@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import React from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
-import { Button } from 'flowbite-react'
-import pdfMake from 'pdfmake/build/pdfmake'
+import { Button } from '@components/common/Button'
 import { IResult } from '@models/interface'
 import { DEFAULT_CONTENT } from '@utils/encoding'
+import { getExportImages } from '@utils/images'
 
 enum CONTENT_LABEL {
   LIFE_PATH = 1,
@@ -14,7 +14,7 @@ enum CONTENT_LABEL {
   PASSION,
 }
 
-function exportResultListPdf(
+async function exportResultListPdf(
   content: {
     image: string | undefined
     width: number
@@ -34,6 +34,7 @@ function exportResultListPdf(
       },
     },
   }
+  const pdfMake = (await import('pdfmake')) as any
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   pdfMake.createPdf(docDefinitions as any).download('Kết quả.pdf')
 }
@@ -135,6 +136,7 @@ export const getRenderImages = ({
 }
 
 export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent, passion }) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const data = [
     {
       type: CONTENT_LABEL.LIFE_PATH,
@@ -158,14 +160,18 @@ export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent,
   const renderImages = getRenderImages({ data })
 
   const exportPDF = async () => {
-    const { getExportImages } = await import('@utils/images')
-    const exportImages = getExportImages({ data })
-    exportResultListPdf(exportImages)
+    setIsLoading(true)
+    const exportImages = await getExportImages({ data })
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    await exportResultListPdf(JSON.parse(JSON.stringify(exportImages)))
+    setIsLoading(false)
   }
 
   return (
     <div>
-      <Button onClick={exportPDF}>Tải xuống PDF</Button>
+      <div className="w-[160px]">
+        <Button label="Tải xuống PDF" loading={isLoading} loadingLabel="Đang xử lý" onClick={exportPDF} />
+      </div>
       <div className="relative overflow-x-auto mt-6">
         <div
           className="block w-full rounded-md border-0 py-6 px-10
@@ -174,7 +180,7 @@ export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent,
           text-sm text-left text-gray-500 dark:text-gray-400
           "
         >
-          {renderImages.map((element, index) => (
+          {renderImages.map((element: any, index: number) => (
             <div key={index} className="mb-8">
               <Image
                 key={`${element.alt}-${index}`}
