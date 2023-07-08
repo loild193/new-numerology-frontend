@@ -3,7 +3,7 @@ const nextConfig = {
   output: 'standalone',
   images: {
     minimumCacheTTL: 10368000,
-    domains: ['assets.io'],
+    domains: ['localhost'],
   },
   poweredByHeader: false,
   reactStrictMode: true,
