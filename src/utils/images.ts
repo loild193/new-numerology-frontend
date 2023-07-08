@@ -14,25 +14,21 @@ export enum CONTENT_LABEL {
   PASSION,
 }
 
-export type ResultType = 'render' | 'pdf'
-
-export const getRenderImages = ({
+export const getExportImages = ({
   data,
-  type,
 }: {
   data: {
     type: CONTENT_LABEL
     alt: string
     values: string[]
   }[]
-  type: ResultType
 }) => {
   const content = [...DEFAULT_CONTENT]
 
   for (const dataObject of data) {
     if (dataObject.type === CONTENT_LABEL.LIFE_PATH) {
       const newLifePathImages = dataObject.values.map((value) => ({
-        image: type === 'pdf' ? MAPPING_LIFE_PATH_IMAGE_BASE64.get(value) : value,
+        image: MAPPING_LIFE_PATH_IMAGE_BASE64.get(value),
         alt: 'Chân dung khách hàng',
         width: 525,
         height: 750,
@@ -40,7 +36,7 @@ export const getRenderImages = ({
       content.push(...newLifePathImages)
     } else if (dataObject.type === CONTENT_LABEL.SOUL) {
       const newSoulImages = dataObject.values.map((value) => ({
-        image: type === 'pdf' ? MAPPING_SOUL_IMAGE_BASE64.get(value) : value,
+        image: MAPPING_SOUL_IMAGE_BASE64.get(value),
         alt: 'Tứ huyệt cảm xúc',
         width: 525,
         height: 750,
@@ -56,7 +52,7 @@ export const getRenderImages = ({
       )
     } else if (dataObject.type === CONTENT_LABEL.PERSONALITY) {
       const newPersonalityImages = dataObject.values.map((value) => ({
-        image: type === 'pdf' ? MAPPING_PERSONALITY_IMAGE_BASE64.get(value) : value,
+        image: MAPPING_PERSONALITY_IMAGE_BASE64.get(value),
         alt: 'Thiết lập mối quan hệ với khách hàng',
         width: 525,
         height: 750,
@@ -72,7 +68,7 @@ export const getRenderImages = ({
       )
     } else if (dataObject.type === CONTENT_LABEL.TALENT) {
       const newTalentImages = dataObject.values.map((value) => ({
-        image: type === 'pdf' ? MAPPING_TALENT_IMAGE_BASE64.get(value) : value,
+        image: MAPPING_TALENT_IMAGE_BASE64.get(value),
         alt: 'Chăm sóc khách hàng',
         width: 525,
         height: 750,
@@ -88,7 +84,7 @@ export const getRenderImages = ({
       )
     } else {
       const newPassionImages = dataObject.values.map((value) => ({
-        image: type === 'pdf' ? MAPPING_PASSION_IMAGE_BASE64.get(value) : value,
+        image: MAPPING_PASSION_IMAGE_BASE64.get(value),
         alt: 'Đam mê của khách hàng',
         width: 525,
         height: 750,

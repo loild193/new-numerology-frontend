@@ -4,7 +4,15 @@ import Image from 'next/image'
 import { Button } from 'flowbite-react'
 import pdfMake from 'pdfmake/build/pdfmake'
 import { IResult } from '@models/interface'
-import { CONTENT_LABEL, getRenderImages } from '@utils/images'
+import { DEFAULT_CONTENT } from '@utils/encoding'
+
+enum CONTENT_LABEL {
+  LIFE_PATH = 1,
+  SOUL,
+  PERSONALITY,
+  TALENT,
+  PASSION,
+}
 
 function exportResultListPdf(
   content: {
@@ -30,6 +38,102 @@ function exportResultListPdf(
   pdfMake.createPdf(docDefinitions as any).download('Kết quả.pdf')
 }
 
+export const getRenderImages = ({
+  data,
+}: {
+  data: {
+    type: CONTENT_LABEL
+    alt: string
+    values: string[]
+  }[]
+}) => {
+  const content = [...DEFAULT_CONTENT]
+
+  for (const dataObject of data) {
+    if (dataObject.type === CONTENT_LABEL.LIFE_PATH) {
+      const newLifePathImages = dataObject.values.map((value) => ({
+        image: value,
+        alt: 'Chân dung khách hàng',
+        width: 525,
+        height: 750,
+      }))
+      content.push(...newLifePathImages)
+    } else if (dataObject.type === CONTENT_LABEL.SOUL) {
+      const newSoulImages = dataObject.values.map((value) => ({
+        image: value,
+        alt: 'Tứ huyệt cảm xúc',
+        width: 525,
+        height: 750,
+      }))
+      content.push(
+        {
+          image: '/result/template/2.png',
+          alt: 'Tứ huyệt cảm xúc',
+          width: 525,
+          height: 750,
+        },
+        ...newSoulImages,
+      )
+    } else if (dataObject.type === CONTENT_LABEL.PERSONALITY) {
+      const newPersonalityImages = dataObject.values.map((value) => ({
+        image: value,
+        alt: 'Thiết lập mối quan hệ với khách hàng',
+        width: 525,
+        height: 750,
+      }))
+      content.push(
+        {
+          image: '/result/template/3.png',
+          alt: 'Thiết lập mối quan hệ với khách hàng',
+          width: 525,
+          height: 750,
+        },
+        ...newPersonalityImages,
+      )
+    } else if (dataObject.type === CONTENT_LABEL.TALENT) {
+      const newTalentImages = dataObject.values.map((value) => ({
+        image: value,
+        alt: 'Chăm sóc khách hàng',
+        width: 525,
+        height: 750,
+      }))
+      content.push(
+        {
+          image: '/result/template/4.png',
+          alt: 'Chăm sóc khách hàng',
+          width: 525,
+          height: 750,
+        },
+        ...newTalentImages,
+      )
+    } else {
+      const newPassionImages = dataObject.values.map((value) => ({
+        image: value,
+        alt: 'Đam mê của khách hàng',
+        width: 525,
+        height: 750,
+      }))
+      content.push(
+        {
+          image: '/result/template/5.png',
+          alt: 'Đam mê của khách hàng',
+          width: 525,
+          height: 750,
+        },
+        ...newPassionImages,
+        {
+          image: '/result/template/6.png',
+          alt: 'Kết thúc',
+          width: 525,
+          height: 750,
+        },
+      )
+    }
+  }
+
+  return content
+}
+
 export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent, passion }) => {
   const data = [
     {
@@ -51,10 +155,11 @@ export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent,
     { type: CONTENT_LABEL.PASSION, alt: 'Đam mê khách hàng', values: [`/result/passion/5-${passion}.png`] },
   ]
 
-  const renderImages = getRenderImages({ data, type: 'render' })
+  const renderImages = getRenderImages({ data })
 
-  const exportPDF = () => {
-    const exportImages = getRenderImages({ data, type: 'pdf' })
+  const exportPDF = async () => {
+    const { getExportImages } = await import('@utils/images')
+    const exportImages = getExportImages({ data })
 
     exportResultListPdf(exportImages)
   }
