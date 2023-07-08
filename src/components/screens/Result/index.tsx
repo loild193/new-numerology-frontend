@@ -160,7 +160,6 @@ export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent,
   const exportPDF = async () => {
     const { getExportImages } = await import('@utils/images')
     const exportImages = getExportImages({ data })
-
     exportResultListPdf(exportImages)
   }
 
