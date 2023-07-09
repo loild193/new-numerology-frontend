@@ -7,7 +7,7 @@ const nextConfig = {
   },
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: true,
+  swcMinify: false,
   eslint: {
     ignoreDuringBuilds: true,
   },

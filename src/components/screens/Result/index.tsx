@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import React, { useState } from 'react'
 import Image from 'next/image'
+import pdfMake from 'pdfmake/build/pdfmake'
 import { Button } from '@components/common/Button'
 import { IResult } from '@models/interface'
 import { DEFAULT_CONTENT } from '@utils/encoding'
@@ -14,7 +15,7 @@ enum CONTENT_LABEL {
   PASSION,
 }
 
-async function exportResultListPdf(
+function exportResultListPdf(
   content: {
     image: string | undefined
     width: number
@@ -34,7 +35,6 @@ async function exportResultListPdf(
       },
     },
   }
-  const pdfMake = (await import('pdfmake')) as any
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   pdfMake.createPdf(docDefinitions as any).download('Kết quả.pdf')
 }
@@ -163,7 +163,7 @@ export const Result: React.FC<IResult> = ({ lifePath, soul, personality, talent,
     setIsLoading(true)
     const exportImages = await getExportImages({ data })
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    await exportResultListPdf(JSON.parse(JSON.stringify(exportImages)))
+    exportResultListPdf(JSON.parse(JSON.stringify(exportImages)))
     setIsLoading(false)
   }
 
