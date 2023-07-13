@@ -10,7 +10,7 @@ import { safeParseJSON } from '@utils/json'
 
 const HomePage = () => {
   return (
-    <MainLayout title="Tra cứu thần số học">
+    <MainLayout title="META SYSTEM SALE">
       <Main />
     </MainLayout>
   )
